@@ -1,0 +1,30 @@
+  <nav class="navbar navbar-light navbar-expand-lg bg-light shadow-sm mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" routerLink="/"><img src="../../assets/images/logo.jpg" alt="INCREFF" height="40px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-grow: 0;">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <a class="nav-link" routerLink="/upload">
+                <span class="material-symbols-outlined">
+                    upload_file
+                </span>
+            </a>
+          <a class="nav-link" routerLink="/cart">
+              <i class="material-icons">shopping_cart</i>
+          </a>
+          <div class="dropdown">
+            <button class="btn btn-light shadow-sm dropdown-toggle fw-bold text-muted" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{userName}}
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
