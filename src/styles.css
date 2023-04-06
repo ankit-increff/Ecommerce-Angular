@@ -1,12 +1,64 @@
+:root {
+	--red: rgb(231,96,104);
+	--redDark: rgb(200, 80, 88);
+	--gray: #ced4da
+}
+
 html {
 	position: relative;
 	min-height: 100%;
 }
 
 body {
-	margin-bottom: 60px; /* Margin bottom by footer height */
+	margin-bottom: 80px; /* Margin bottom by footer height */
 }
 
 .h-fit {
     height: fit-content;
+}
+
+.d-inlineBlock {
+	display: inline-block;
+}
+
+body {
+	background-color: rgb(255, 252, 255);
+}
+
+.btn-red, .btn-outline-red:hover {
+	background-color: var(--red);
+	color: white;
+}
+
+.btn-red:hover {
+	background-color: var(--redDark);
+	color: white;
+}
+
+.btn-outline-red {
+	border-color: var(--red);
+	color: var(--red);
+	background-color: white;
+}
+
+.border-red, .border-red:hover{
+	border-color: var(--red) !important;
+	
+}
+
+.text-red, .text-red:focus {
+	color: var(--red);
+}
+
+.bg-red {
+	background-color: var(--red);
+}
+
+.no-border-on-focus:focus {
+	/* border-color: var(--gray) !important; */
+	box-shadow: none !important;;
+}
+
+.w-3rem {
+	width: 3rem !important;
 }

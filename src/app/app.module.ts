@@ -12,6 +12,7 @@ import { UploadComponent } from './upload/upload.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UtilsModule } from './utils/utils.module';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { UtilsModule } from './utils/utils.module';
     CartComponent,
     UploadComponent,
     PageNotFoundComponent,
+    ProductDetailComponent,
   ],
   imports: [
     BrowserModule,
