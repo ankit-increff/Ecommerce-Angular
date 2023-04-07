@@ -2,14 +2,13 @@
     <div class="row">
         <div class="col-12 col-lg-7">
             <div class="row shadow-sm mb-2" *ngFor="let i of repeat">
-                <div class="col-12 col-sm-4 text-center"><img src="../../assets/images/mac1.jpg" alt="" height="220px">
-                </div>
-                <div class="col py-3">
+                <div class="col-12 col-sm-4 text-center"><img src="../../assets/images/mac1.jpg" alt="" height="220px"></div>
+                <div class="col py-3 position-relative">
                     <h6 class="text-muted mb-0">Apple</h6>
                     <h5 class="mb-0">Macbook Air</h5>
                     <p class="mb-2 opacity-75">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Harum, minus.
                     </p>
-                    <h5 class="d-inlineBlock me-2 fw-normal">₹1,50,000.00</h5> 
+                    <h5 class="d-inline-block me-2 fw-normal">₹1,50,000.00</h5> 
                     <small>
                         <span class="text-muted text-decoration-line-through">₹1,67,000.00</span> 
                         <span class="text-success ms-1">(15% Off)</span>
@@ -31,7 +30,10 @@
                         </button>
                     </div>
                     <h5 class="mb-0"><span class="fw-normal">Subtotal:</span> ₹3,00,000.00</h5>
-
+                    
+                    <button class="btn btn-outline-red position-absolute top-0 end-0 border-0 p-1 m-2"><span class="material-symbols-outlined">
+                        delete
+                        </span></button>
                 </div>
             </div>
         </div>

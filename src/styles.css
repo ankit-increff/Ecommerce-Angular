@@ -17,10 +17,6 @@ body {
     height: fit-content;
 }
 
-.d-inlineBlock {
-	display: inline-block;
-}
-
 body {
 	background-color: rgb(255, 252, 255);
 }
@@ -61,4 +57,8 @@ body {
 
 .w-3rem {
 	width: 3rem !important;
+}
+
+.w-fit {
+	width: fit-content;
 }

@@ -23,8 +23,8 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
     ProductsComponent,
     CartComponent,
     UploadComponent,
-    PageNotFoundComponent,
     ProductDetailComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

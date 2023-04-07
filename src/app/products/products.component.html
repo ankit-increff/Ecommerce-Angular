@@ -1,32 +1,91 @@
 <div class="container-fluid pt-2">
-  <div class="d-flex justify-content-between pe-4 filters">
-    <button class="btn btn-light shadow-sm d-flex" (click)="open(content)"><span class="material-symbols-outlined">
-        filter_alt
-      </span> Filters</button>
-    <div class="dropdown">
-      <button class="btn btn-light shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
-        aria-expanded="false">Sort by: <strong class="text-muted">{{sort}}</strong></button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-      </ul>
-    </div>
-  </div>
   <div class="row">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let i of repeat">
-        <div class="card border-0 shadow-sm position-relative product-card" routerLink="product/5">
-          <img class="img-fluid rounded img-thumbnail p-3 border-0" src="assets/images/mac1.jpg"
-            alt="Image not Available">
+    <div class="col-2 d-none d-sm-block">
+      <h4 class="mb-3">Filters</h4>
+      <h6 class="text-muted text-uppercase">Price Range</h6>
+      <div class="d-flex align-items-baseline">
+        <div class="col-5">
+          <div class="form-floating mb-3">
+            <input class="form-control" id="min-price" placeholder="-">
+            <label for="min-price">Min</label>
+          </div>
+        </div>
+        <div class="col d-flex">
+          <div class="mx-auto h-fit"> to </div>
+        </div>
+        <div class="col-5">
+          <div class="form-floating mb-3">
+            <input class="form-control" id="max-price" placeholder="-">
+            <label for="max-price">Max</label>
+          </div>
+        </div>
+      </div>
+
+      <h6 class="text-muted text-uppercase mt-3">Ratings</h6>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="rating" id="4-star">
+        <label class="form-check-label" for="4-star">
+          4★ & above
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="rating" id="3-star">
+        <label class="form-check-label" for="3-star">
+          3★ & above
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="rating" id="2-star">
+        <label class="form-check-label" for="2-star">
+          2★ & above
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="rating" id="1-star">
+        <label class="form-check-label" for="1-star">
+          1★ & above
+        </label>
+      </div>
+
+      <h6 class="text-muted text-uppercase mt-4">Brands</h6>
+      <div class="form-check" *ngFor="let i of repeat">
+        <input class="form-check-input" type="checkbox" name="brand" value="apple">
+        <label class="form-check-label" for="apple">
+          Apple
+        </label>
+      </div>
+    </div>
+    <div class="col-12 col-sm-10">
+      <div class="d-flex justify-content-between filters">
+        <button class="btn btn-light shadow-sm d-flex" (click)="open(content)"><span class="material-symbols-outlined">
+            filter_alt
+          </span> Filters</button>
+        <div class="dropdown">
+          <button class="btn btn-light shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Sort by: <strong class="text-muted">{{sort}}</strong></button>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item active">Relevance</li>
+            <li class="dropdown-item">Price low to high</li>
+            <li class="dropdown-item">Price high to low</li>
+            <li class="dropdown-item">Ratings</li>
+          </ul>
+        </div>
+      </div>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-0">
+        <div class="col" *ngFor="let i of repeat">
+          <div class="card border-0 shadow-sm position-relative product-card" routerLink="product/5">
+            <img class="img-fluid rounded img-thumbnail p-3 border-0" src="assets/images/mac1.jpg"
+              alt="Image not Available">
             <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">4.8 ⭐</div>
-          <div class="card-body">
-            <h5 class="card-title mb-1">Macbook Air</h5>
-            <p class="mb-1">Lorem ipsum dolor sit amet.</p>
-            <h5 class="d-inlineBlock me-2">₹1,50,000.00</h5> <small><span
-                class="text-muted text-decoration-line-through">₹1,67,000.00</span> <span class="text-success ms-1">(15%
-                Off)</span></small>
-            <button class="btn btn-sm btn-red ">Add to cart</button>
+            <div class="card-body">
+              <h5 class="card-title mb-1">Macbook Air</h5>
+              <p class="mb-1">Lorem ipsum dolor sit amet.</p>
+              <h5 class="d-inline-block me-2">₹1,50,000.00</h5> <small><span
+                  class="text-muted text-decoration-line-through">₹1,67,000.00</span> <span
+                  class="text-success ms-1">(15%
+                  Off)</span></small>
+              <button class="btn btn-sm btn-red ">Add to cart</button>
+            </div>
           </div>
         </div>
       </div>
