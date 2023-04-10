@@ -1,0 +1,19 @@
+{
+    "credentials": [
+        {
+            "email": "ankit@increff.com",
+            "name": "Ankit Agrawal",
+            "password": "passwordd"
+        },
+        {
+            "email": "sanup@increff.com",
+            "name": "Sanup",
+            "password": "passwordd"
+        },
+        {
+            "email": "nairobi@gmail.com",
+            "name": "Nairobi Sharma",
+            "password": "passwordd"
+        }
+    ]
+}

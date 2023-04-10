@@ -5,3 +5,25 @@
 .login-container {
     height: 80vh;
 }
+
+input.ng-invalid {
+    border-color: red;
+    border-left-width: 5px;
+}
+
+input.ng-valid {
+    border-color: green;
+    border-left-width: 5px;
+}
+
+input.ng-pristine {
+    border-color: rgb(207, 202, 202) !important;
+}
+
+.error-message {
+    color: red;
+}
+
+.success-message {
+    color: green;
+}

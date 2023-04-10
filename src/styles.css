@@ -62,3 +62,9 @@ body {
 .w-fit {
 	width: fit-content;
 }
+
+.one-liner {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+  }

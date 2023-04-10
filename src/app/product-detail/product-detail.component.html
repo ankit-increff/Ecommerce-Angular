@@ -38,11 +38,11 @@
 </div>
 
 <div class="col-10 col-md-5 col-lg-5 offset-1 offset-md-1 mt-4 mt-md-0">
-  <h5 class="text-muted mb-0">Apple</h5>
-  <h4 class="mb-1">Macbook Air</h4>
-  <p class="opacity-75 mb-2">Lorem ipsum dolor sit amet consectetur.</p>
-  <h4 class="d-inline-block me-2 mb-0">₹1,50,000.00</h4> <span><span
-    class="text-muted text-decoration-line-through">₹1,67,000.00</span> <span class="text-success ms-1">(15%
+  <h5 class="text-muted mb-0">{{product.brand}}</h5>
+  <h4 class="mb-1">{{product.title}}</h4>
+  <p class="opacity-75 mb-2 one-liner">{{product.description}}</p>
+  <h4 class="d-inline-block me-2 mb-0">{{product.price | currency: 'INR'}}</h4> <span><span
+    class="text-muted text-decoration-line-through">{{getMrp(product.price, product.discount) | currency:'INR'}}</span> <span class="text-success ms-1">({{product.discount}}%
     Off)</span></span>
     <p class="text-success mb-3">inclusive of all taxes</p>
     <button class="btn btn-red mb-4 d-none">Add to cart</button>
@@ -69,7 +69,7 @@
   </div>
 
   <h5>Product Description</h5>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus facilis recusandae veniam! In provident magni omnis consequuntur debitis illo facilis perspiciatis accusamus sed dolores? Obcaecati vero doloremque ut explicabo repellendus.</p>
+  <p>{{product.description}}</p>
 
   <h5>Delivery Options</h5>
   <ul>
