@@ -84,7 +84,7 @@
                   class="text-muted text-decoration-line-through">₹{{getMrp(product.price, product.discount) | number : '1.2-2'}}</span> <span
                   class="text-success ms-1">({{product.discount}}%
                   Off)</span></small>
-              <button class="btn btn-sm btn-red">Add to cart</button>
+              <button class="btn btn-sm btn-red" (click)="addToCartHandler($event,product)">Add to cart</button>
             </div>
           </div>
         </div>

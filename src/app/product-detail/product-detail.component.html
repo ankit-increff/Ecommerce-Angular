@@ -45,8 +45,8 @@
     class="text-muted text-decoration-line-through">{{getMrp(product.price, product.discount) | currency:'INR'}}</span> <span class="text-success ms-1">({{product.discount}}%
     Off)</span></span>
     <p class="text-success mb-3">inclusive of all taxes</p>
-    <button class="btn btn-red mb-4 d-none">Add to cart</button>
-    <div class="d-flex mb-4">
+    <button class="btn btn-red mb-4" (click)="addToCartHandler()">Add to cart</button>
+    <div class="d-flex mb-4 d-none">
     <div class="input-group w-fit">
       <button class="btn btn-outline-red border-end-0 px-2">
           <span class="material-symbols-outlined">

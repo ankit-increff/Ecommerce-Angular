@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ProductService } from './services/product.service';
 import { UsersService } from './services/users.service';
 import { CartService } from './services/cart.service';
+import { cartItem } from './interfaces/cart';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { CartService } from './services/cart.service';
 export class AppComponent {
   title = 'ecommerce';
 
-  constructor(private productService: ProductService, private usersService: UsersService, private cartService: CartService) {}
+  constructor(private productService: ProductService, private usersService: UsersService, private cartService: CartService) { }
   ngOnInit() {
     this.productService.getProducts();
     this.cartInitializer();
@@ -22,29 +23,33 @@ export class AppComponent {
   }
 
   cartInitializer() {
-    if(!localStorage.getItem('cart-data')) localStorage.setItem('cart-data', JSON.stringify({0:{}}));
+    if (!localStorage.getItem('cart-data')) localStorage.setItem('cart-data', JSON.stringify({ 0: {} }));
   }
 
   synchronizeServices() {
     const currentUserJson = localStorage.getItem('loggedInUser');
-    let currUser = undefined;
-    if(currentUserJson) currUser = JSON.parse(currentUserJson).name;
+    let currUser = { email: '0', name: "Guest" };
+    if (currentUserJson) currUser = JSON.parse(currentUserJson);
     this.usersService.setCurrentUser(currUser);
 
-    //sync cart data
-    this.usersService.getCurrentUser().subscribe(data => {
-      const cartData = JSON.parse(localStorage.getItem('cart-data') || "");
-      if(!data) this.cartService.setCurrentCart(cartData[0]);
-      else{
-       const email = data.email;
-       let currCart  = {};
-       if(email in cartData) currCart = cartData[email];
-       else {
-        cartData[email] = {};
-        localStorage.setItem('cart-data', JSON.stringify(cartData));
-       }
-       this.cartService.setCurrentCart(cartData[email]);
-      } 
+    this.cartSynchronize(currUser.email);
+  }
+
+  cartSynchronize(email:string) {
+    const cartData = JSON.parse(localStorage.getItem('cart-data') || "");
+    if (!(email in cartData)) {
+      cartData[email] = {};
+      localStorage.setItem('cart-data', JSON.stringify(cartData));
+    }
+    const userCart = cartData[email];
+    this.productService.products.subscribe(data => {
+      let products = data.products;
+      let items:cartItem[] = [];
+      for(let id in userCart) {
+        let product = products.find(p => p.id == parseInt(id));
+        if(product) items.push({ product, quantity: userCart[id] });
+      }
+      this.cartService.setCurrentCart(items);
     })
   }
 

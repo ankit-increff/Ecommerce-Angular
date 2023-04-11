@@ -12,9 +12,11 @@ export class UsersService {
 
   users !: Observable<usersJson>;
   currentUser = new Subject<userInfo>();
+  userData !: userInfo;
 
   setCurrentUser(user:userInfo){
     this.currentUser.next(user);
+    this.userData = user;
   }
   getCurrentUser():Observable<userInfo>{
     return this.currentUser.asObservable();
