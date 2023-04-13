@@ -5,5 +5,13 @@ export interface cartItem {
 }
 
 export interface itemMap {
-    [id: string]: number;
+    [id: number]: number;
 } 
+
+export interface summary {
+    totalMrp: number,
+    discount: number,
+    deliveryCharges: number,
+    amount: number,
+    savings: number
+  }

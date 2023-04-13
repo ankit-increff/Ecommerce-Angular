@@ -21,6 +21,7 @@ export class LoginComponent {
     });
 
     this.userService.getCurrentUser().subscribe(data => {
+      console.warn(data);
       if(data) this.route.navigate(['/']);   //handle
     }) 
   }

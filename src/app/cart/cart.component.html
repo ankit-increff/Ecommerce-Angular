@@ -2,13 +2,13 @@
     <div class="row">
         <div class="col-12 col-lg-7">
             <div class="row shadow-sm mb-2" *ngFor="let item of cartItems">
-                <div class="col-12 col-sm-4 text-center"><img src="../../assets/images/mac1.jpg" alt="" height="220px"></div>
+                <div class="col-12 col-sm-4 text-center"><img src="../../assets/images/mac1.jpg" alt="" height="220px" routerLink="../product/{{item.product.id}}"></div>
                 <div class="col py-3 position-relative">
-                    <h6 class="text-muted mb-0">{{item.product.brand}}</h6>
-                    <h5 class="mb-0">{{item.product.title}}</h5>
+                    <h6 class="text-muted mb-0" routerLink="../product/{{item.product.id}}">{{item.product.brand}}</h6>
+                    <h5 class="mb-0" routerLink="../product/{{item.product.id}}">{{item.product.title}}</h5>
                     <p class="mb-2 opacity-75 one-liner">Lorem ipsum dolor sit amet.
                     </p>
-                    <h5 class="d-inline-block me-2 fw-normal">{{item.product.price | currency: 'INR'}}</h5> 
+                    <h5 class="d-inline-block me-2 fw-normal">{{item.product.price | currency: 'INR'}}</h5>     
                     <small>
                         <span class="text-muted text-decoration-line-through">{{getMrp(item.product.price, item.product.discount)| currency:'INR'}}</span> 
                         <span class="text-success ms-1">({{item.product.discount}}% Off)</span>
@@ -21,7 +21,7 @@
                         </button>
                         <input type="text"
                             class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
-                            value="2" placeholder="" aria-label="Example text with button addon"
+                            value="{{item.quantity}}" placeholder="" aria-label="Example text with button addon"
                             aria-describedby="button-addon1">
                         <button class="btn btn-outline-red border-start-0 px-2">
                             <span class="material-symbols-outlined">
@@ -29,7 +29,7 @@
                             </span>
                         </button>
                     </div>
-                    <h5 class="mb-0"><span class="fw-normal">Subtotal:</span> ₹3,00,000.00</h5>
+                    <h5 class="mb-0"><span class="fw-normal">Subtotal:</span> {{item.product.price * item.quantity | currency: 'INR'}}</h5>
                     
                     <button class="btn btn-outline-red position-absolute top-0 end-0 border-0 p-1 m-2"><span class="material-symbols-outlined">
                         delete
@@ -43,23 +43,24 @@
                 <hr>
                 <div class="d-flex justify-content-between">
                     <div>Total Mrp</div>
-                    <div>₹1,67,000.00</div>
+                    <div>{{summary.totalMrp | currency:'INR'}}</div>
                 </div>
                 <div class="d-flex justify-content-between text-success">
                     <div class="fw-bold">Discount</div>
-                    <div>-₹17,000.00</div>
+                    <div>-{{summary.discount | currency:'INR'}}</div>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <div>Delivery Charges</div>
-                    <div>₹49</div>
+                    <div [ngClass]="summary.deliveryCharges == 0 ? 'text-success':''">Delivery Charges</div>
+                    <div *ngIf="summary.deliveryCharges != 0">{{summary.deliveryCharges | currency:'INR'}}</div>
+                    <div *ngIf="summary.deliveryCharges == 0" class="text-success">FREE <span class="text-decoration-line-through">₹49.00</span></div>
                 </div>
                 <hr>
                 <div class="d-flex justify-content-between">
                     <div class="h5">Total Amount</div>
-                    <div class="h5">₹1,50,049.00</div>
+                    <div class="h5">{{summary.amount | currency:'INR'}}</div>
                 </div>
                 <hr>
-                <p class="text-success">Youl'll save <strong>₹16,951.00</strong> on this order.</p>
+                <p [ngClass]="'text-success '+ ((summary.savings > 0) ? '':'d-none')">You'll save <strong>{{summary.savings | currency:'INR'}}</strong> on this order.</p>
                 <button class="btn btn-red w-100 text-center">Place Order</button>
             </div>
         </div>

@@ -15,3 +15,7 @@ export interface productJson {
     products: product[];
 }
 
+export interface quantityArray {
+    [id: number]: number;
+}
+

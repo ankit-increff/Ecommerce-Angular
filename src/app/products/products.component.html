@@ -74,17 +74,36 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-0">
         <div class="col" *ngFor="let product of products">
           <div class="card border-0 shadow-sm position-relative product-card" routerLink="product/{{product.id}}">
-            <img class="img-fluid rounded img-thumbnail p-3 border-0" src="assets/images/mac1.jpg"
-              alt="Image not Available">
-            <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">{{product.rating}} ⭐</div>
+            <div class="img-div"><img class="img-fluid img-thumbnail rounded p-3 border-0" src="{{product.thumbnail}}"
+              alt="Image not Available"></div>
+            <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
+              {{product.rating | number : '1.1-1'}} ⭐</div>
             <div class="card-body">
               <h5 class="card-title mb-1">{{product.title}}</h5>
               <p class="mb-1 text-muted opacity-75 one-liner">{{product.description}}</p>
               <h5 class="d-inline-block me-2">₹{{product.price | number : '1.2-2'}}</h5> <small><span
-                  class="text-muted text-decoration-line-through">₹{{getMrp(product.price, product.discount) | number : '1.2-2'}}</span> <span
-                  class="text-success ms-1">({{product.discount}}%
+                  class="text-muted text-decoration-line-through">₹{{getMrp(product.price, product.discount) | number :
+                  '1.2-2'}}</span> <span class="text-success ms-1">({{product.discount}}%
                   Off)</span></small>
-              <button class="btn btn-sm btn-red" (click)="addToCartHandler($event,product)">Add to cart</button>
+              <div class="input-group w-fit" *ngIf="quantities.hasOwnProperty(product.id); else addToCartBtn" (click)="$event.stopPropagation()">
+                <button class="btn btn-outline-red border-end-0 px-2" (click)="decreaseCartHandler(product.id)">
+                  <span class="material-symbols-outlined">
+                    remove
+                  </span>
+                </button>
+                <input type="text"
+                  class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
+                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)" placeholder="" aria-label="Example text with button addon"
+                  aria-describedby="button-addon1">
+                <button class="btn btn-outline-red border-start-0 px-2" (click)="increaseCartHandler(product.id)">
+                  <span class="material-symbols-outlined">
+                    add
+                  </span>
+                </button>
+              </div>
+              <ng-template #addToCartBtn>
+                <button class="btn btn-sm btn-red" (click)="addToCartHandler($event,product)">Add to cart</button>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -158,3 +177,5 @@
       <button class="btn btn-red ms-2">Apply</button>
     </div>
   </ng-template>
+
+  

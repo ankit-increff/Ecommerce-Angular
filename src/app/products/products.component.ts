@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProductService } from '../services/product.service';
-import { product } from '../interfaces/products';
+import { product, quantityArray } from '../interfaces/products';
 import { UsersService } from '../services/users.service';
 import { CartService } from '../services/cart.service';
 
@@ -14,16 +14,26 @@ import { CartService } from '../services/cart.service';
 export class ProductsComponent {
   closeResult = '';
 
-	constructor(private offcanvasService: NgbOffcanvas, private productService:  ProductService, private usersService: UsersService, private cartService:CartService) {}
+  constructor(private offcanvasService: NgbOffcanvas, private productService: ProductService, private usersService: UsersService, private cartService: CartService) { }
 
-  currentUserEmail:string = '0';
   products: product[] = [];
+  quantities: quantityArray = {}
   ngOnInit() {
+    console.log('prodInitStarted');
     this.productService.products.subscribe(data => {
       this.products = data.products;
+      console.log("prod - syncedProducts");
     })
-    this.usersService.getCurrentUser().subscribe(data => {
-      this.currentUserEmail = data.email;
+
+    this.cartService.currentCartData.forEach(item => {
+      this.quantities[item.product.id] = item.quantity;
+    });  //page navigation safe
+
+    this.cartService.getCurrentCart().subscribe(data => {
+      data.forEach(item => {
+        this.quantities[item.product.id] = item.quantity;
+      })
+      console.log("prod - syncedCart", this.quantities);
     })
   }
 
@@ -31,14 +41,28 @@ export class ProductsComponent {
     return (price * 100) / (100 - discount);
   }
 
-	open(content:any) {
-		this.offcanvasService.open(content, { ariaLabelledBy: 'offcanvas-basic-title' });
-	}
-
-  addToCartHandler($event: any, product:product) {
-    $event.stopPropagation();
-    this.cartService.addToCart(product, 1);
+  open(content: any) {
+    this.offcanvasService.open(content, { ariaLabelledBy: 'offcanvas-basic-title' });
   }
 
-  sort= 'Relevance';
+  addToCartHandler($event: any, product: product) {
+    $event.stopPropagation();
+    this.cartService.addToCart(product.id, 1);
+  }
+  
+  increaseCartHandler(id: number) {
+    this.cartService.addToCart(id, 1);
+  }
+
+  decreaseCartHandler(id: number) {
+    this.cartService.addToCart(id, -1);
+  }
+
+  updateCartHandler(id:number, $event: any) {
+    console.log('updated');
+    this.cartService.updateCart(id, parseInt($event.target.value))
+  }
+
+  sort = 'Relevance';
 }
+// todo update cart handler

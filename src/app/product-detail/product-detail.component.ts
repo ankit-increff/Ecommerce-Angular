@@ -33,6 +33,6 @@ export class ProductDetailComponent {
   }
 
   addToCartHandler() {
-    this.cartService.addToCart(this.product, 1);
+    this.cartService.addToCart(this.product.id, 1);
   }
 }

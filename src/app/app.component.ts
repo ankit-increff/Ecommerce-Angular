@@ -14,12 +14,12 @@ export class AppComponent {
 
   constructor(private productService: ProductService, private usersService: UsersService, private cartService: CartService) { }
   ngOnInit() {
-    this.productService.getProducts();
     this.cartInitializer();
+    this.productService.getProducts();
+    this.synchronizeServices();
   }
 
   ngAfterViewInit() {
-    this.synchronizeServices();
   }
 
   cartInitializer() {
@@ -27,12 +27,17 @@ export class AppComponent {
   }
 
   synchronizeServices() {
+    const email = this.synchronizeUser();
+    this.cartSynchronize(email);
+  }
+
+  synchronizeUser() {
     const currentUserJson = localStorage.getItem('loggedInUser');
     let currUser = { email: '0', name: "Guest" };
     if (currentUserJson) currUser = JSON.parse(currentUserJson);
     this.usersService.setCurrentUser(currUser);
-
-    this.cartSynchronize(currUser.email);
+    console.log("syncedUserService");
+    return currUser.email;
   }
 
   cartSynchronize(email:string) {
@@ -50,6 +55,7 @@ export class AppComponent {
         if(product) items.push({ product, quantity: userCart[id] });
       }
       this.cartService.setCurrentCart(items);
+      console.log('syncedCartService', items);
     })
   }
 
