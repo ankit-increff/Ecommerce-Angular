@@ -67,4 +67,12 @@ body {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-  }
+}
+
+.c-pointer {
+	cursor: pointer;
+}
+
+.img-aspect {
+	aspect-ratio: 1;
+}

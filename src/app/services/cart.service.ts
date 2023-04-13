@@ -71,10 +71,31 @@ export class CartService {
     this.setCurrentCart(items);
   }
 
-  getTotalQuantity(){
-    this.getCurrentCart().subscribe(data => {
-      return Object.keys(data).length;
-    })
+  // getTotalQuantity(){
+  //   this.getCurrentCart().subscribe(data => {
+  //     return Object.keys(data).length;
+  //   })
+  // }
+
+  removeFromCart(id:number) {
+    let cartData = JSON.parse(localStorage.getItem('cart-data') || ''),
+    email = this.usersService.userData.email,
+    userCart = cartData[email];
+
+    delete userCart[id];
+    cartData[email]=userCart;
+    localStorage.setItem('cart-data', JSON.stringify(cartData));
+
+    let newCartItems = [...this.currentCartData.filter(item => item.product.id != id)];
+    this.setCurrentCart(newCartItems);
+  }
+
+  clearCart() {
+    let cartData = JSON.parse(localStorage.getItem('cart-data') || ''),
+    email = this.usersService.userData.email;
+    cartData[email]={};
+    localStorage.setItem('cart-data', JSON.stringify(cartData));
+    this.setCurrentCart([]);
   }
 
 

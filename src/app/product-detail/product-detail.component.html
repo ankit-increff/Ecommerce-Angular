@@ -1,91 +1,89 @@
 <div class="row">
-<div class="col-12 col-md-6 col-lg-6">
-  <div class="row">
-  <div class="col-2">
-      <img class="img-fluid" src="../../assets/images/mac1.jpg" alt="">
-      <img class="img-fluid" src="../../assets/images/mac1.jpg" alt="">
-      <img class="img-fluid" src="../../assets/images/mac1.jpg" alt="">
-  </div>
-  <div class="col-8 col-md-10">
-    <div id="carouselExampleIndicators" class="carousel carousel-dark shadow-sm slide" data-bs-ride="carousel">
-        <!-- <div class="carousel-indicators">
+  <div class="col-12 col-md-6 col-lg-6">
+    <div class="row">
+      <div class="col-2">
+        <div class="img-aspect mb-2" *ngFor="let image of product.images; index as i"
+          data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="i"><img class="img-fluid img-aspect"
+            src="{{image}}" alt=""></div>
+      </div>
+      <div class="col-8 col-md-10">
+        <div id="carouselExampleIndicators" class="carousel carousel-dark shadow-sm slide" data-bs-ride="carousel">
+          <!-- <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div> -->
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="../../assets/images/mac1.jpg" class="d-block w-100 img-fluid" alt="...">
+          <div class="carousel-inner">
+            <div *ngFor="let image of product.images; index as i" class="carousel-item img-aspect"
+              [ngClass]="{'active':i===0}">
+              <img src="{{image}}" class="d-block w-100 img-fluid img-aspect" alt="...">
+            </div>
           </div>
-          <div class="carousel-item">
-            <img src="../../assets/images/mac1.jpg" class="d-block w-100 img-fluid" alt="...">
-          </div>
-          <div class="carousel-item">
-            <img src="../../assets/images/mac1.jpg" class="d-block w-100 img-fluid" alt="...">
-          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
       </div>
     </div>
-</div>
-</div>
+  </div>
 
-<div class="col-10 col-md-5 col-lg-5 offset-1 offset-md-1 mt-4 mt-md-0">
-  <h5 class="text-muted mb-0">{{product.brand}}</h5>
-  <h4 class="mb-1">{{product.title}}</h4>
-  <p class="opacity-75 mb-2 one-liner">{{product.description}}</p>
-  <h4 class="d-inline-block me-2 mb-0">{{product.price | currency: 'INR'}}</h4> <span><span
-    class="text-muted text-decoration-line-through">{{getMrp(product.price, product.discount) | currency:'INR'}}</span> <span class="text-success ms-1">({{product.discount}}%
-    Off)</span></span>
+  <div class="col-10 col-md-5 col-lg-5 offset-1 offset-md-1 mt-4 mt-md-0">
+    <h5 class="text-muted mb-0">{{product.brand}}</h5>
+    <h4 class="mb-1">{{product.title}}</h4>
+    <p class="opacity-75 mb-2 one-liner">{{product.description}}</p>
+    <h4 class="d-inline-block me-2 mb-0">{{product.price | currency: 'INR'}}</h4> <span><span
+        class="text-muted text-decoration-line-through">{{getMrp(product.price, product.discount) |
+        currency:'INR'}}</span> <span class="text-success ms-1">({{product.discount}}%
+        Off)</span></span>
     <p class="text-success mb-3">inclusive of all taxes</p>
-    <button class="btn btn-red mb-4" (click)="addToCartHandler()">Add to cart</button>
-    <div class="d-flex mb-4 d-none">
-    <div class="input-group w-fit">
-      <button class="btn btn-outline-red border-end-0 px-2">
+    <button class="btn btn-red mb-4" *ngIf="!quantity" (click)="addToCartHandler()">Add to cart</button>
+    <div *ngIf="quantity" class="d-flex mb-4">
+      <div class="input-group w-fit">
+        <button class="btn btn-outline-red border-end-0 px-2" (click)="decreaseCartHandler()">
           <span class="material-symbols-outlined">
-              remove
+            remove
           </span>
-      </button>
-      <input type="text"
+        </button>
+        <input type="text"
           class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
-          value="2" placeholder="" aria-label="Example text with button addon"
-          aria-describedby="button-addon1">
-      <button class="btn btn-outline-red border-start-0 px-2">
+          (keyup)="updateCartHandler($event)" value="{{quantity}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+        <button class="btn btn-outline-red border-start-0 px-2" (click)="increaseCartHandler()">
           <span class="material-symbols-outlined">
-              add
+            add
           </span>
-      </button>
+        </button>
+      </div>
+      <button class="btn btn-red d-flex ms-3" routerLink="/cart">Go to cart <span
+          class="material-symbols-outlined ms-2">
+          arrow_forward
+        </span></button>
+    </div>
+
+    <h5>Product Description</h5>
+    <p>{{product.description}}</p>
+
+    <h5>Delivery Options</h5>
+    <ul>
+      <li>100% Original Products</li>
+      <li>Pay on delivery might be available</li>
+      <li>Easy 14 days returns and exchanges</li>
+      <li>Try & Buy might be available</li>
+    </ul>
+
+    <h5>Payment Options</h5>
+    <ul>
+      <li>5% Cashback on Flipkart Axis Bank Card</li>
+      <li>₹5,000 discount on HDFC credit and debit card emi txrn</li>
+      <li>₹5,000 discount on HDFC credit card txrn</li>
+      <li>Buy this product & Get upto ₹500 off on Furniture</li>
+    </ul>
+
   </div>
-  <button class="btn btn-red d-flex ms-3" routerLink="/cart">Go to cart <span class="material-symbols-outlined ms-2">
-    arrow_forward
-    </span></button>
-  </div>
-
-  <h5>Product Description</h5>
-  <p>{{product.description}}</p>
-
-  <h5>Delivery Options</h5>
-  <ul>
-    <li>100% Original Products</li>
-    <li>Pay on delivery might be available</li>
-    <li>Easy 14 days returns and exchanges</li> 
-    <li>Try & Buy might be available</li>
-  </ul>
-
-  <h5>Payment Options</h5>
-  <ul>
-    <li>5% Cashback on Flipkart Axis Bank Card</li>
-    <li>₹5,000 discount on HDFC credit and debit card emi txrn</li>
-    <li>₹5,000 discount on HDFC credit card txrn</li>
-    <li>Buy this product & Get upto ₹500 off on Furniture</li>
-  </ul>
-
-</div>
 </div>

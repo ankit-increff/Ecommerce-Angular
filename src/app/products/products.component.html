@@ -74,7 +74,7 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-0">
         <div class="col" *ngFor="let product of products">
           <div class="card border-0 shadow-sm position-relative product-card" routerLink="product/{{product.id}}">
-            <div class="img-div"><img class="img-fluid img-thumbnail rounded p-3 border-0" src="{{product.thumbnail}}"
+            <div class="img-aspect"><img class="img-fluid img-aspect rounded p-1 border-0" src="{{product.thumbnail}}"
               alt="Image not Available"></div>
             <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
               {{product.rating | number : '1.1-1'}} ⭐</div>

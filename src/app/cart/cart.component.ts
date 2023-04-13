@@ -11,12 +11,12 @@ import { cartItem, summary } from '../interfaces/cart';
 })
 
 export class CartComponent {
-  repeat = Array(8).fill(0);
-
   constructor(private cartService: CartService) {};
      
   cartItems: cartItem[] = [];
   summary!:summary;
+  removingProduct!: product;
+  totalQuantity = 0;
 
   ngOnInit() {
     this.cartItems = this.cartService.currentCartData;
@@ -26,7 +26,11 @@ export class CartComponent {
       console.log(data);
       this.cartItems = data;
       this.calculateSummary();
-    })    
+    }) 
+    this.cartItems.forEach(item => this.totalQuantity += item.quantity);
+    this.cartService.totalQuantity.subscribe(data => {
+      this.totalQuantity = data;
+    }) 
   }
 
   calculateSummary() {
@@ -38,10 +42,11 @@ export class CartComponent {
       savings: 0
 
     };
+    console.log(this.cartItems);
     this.cartItems.forEach(item => {
       let product = item.product;
-      tempSummary.amount+=product.price;
-      tempSummary.totalMrp+=this.getMrp(product.price, product.discount);
+      tempSummary.amount+=product.price*item.quantity;
+      tempSummary.totalMrp+=this.getMrp(product.price, product.discount)*item.quantity;
     });
 
     tempSummary.discount = tempSummary.totalMrp-tempSummary.amount;
@@ -52,12 +57,38 @@ export class CartComponent {
     tempSummary.savings = tempSummary.totalMrp - tempSummary.amount;
 
     this.summary = tempSummary;
+    console.log(this.summary);
   }
 
   getMrp(price: number, discount: number) {
     return (price * 100) / (100 - discount);
   }
 
+  increaseCartHandler(id: number) {
+    this.cartService.addToCart(id, 1);
+  }
+
+  decreaseCartHandler(id: number) {
+    this.cartService.addToCart(id, -1);
+  }
+
+  updateCartHandler(id:number, $event: any) {
+    console.log('updated');
+    this.cartService.updateCart(id, parseInt($event.target.value))
+  }
+
+  setRemovingProduct(product: product)  {
+    this.removingProduct=product;
+  }
+
+  removeFromCartHandler() {
+    console.log('removing', this.removingProduct);
+    this.cartService.removeFromCart(this.removingProduct.id);
+  }
+
+  clearCartHandler() {
+    this.cartService.clearCart();
+  }
 
 
 }

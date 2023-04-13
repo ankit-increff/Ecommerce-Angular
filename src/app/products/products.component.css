@@ -2,11 +2,3 @@
     transform: scale(1.02);
     /* shadow: */
 }
-
-.img-thumbnail {
-    aspect-ratio: 1;
-}
-
-.img-div {
-    aspect-ratio: 1;    
-}

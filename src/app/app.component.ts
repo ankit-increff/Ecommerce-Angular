@@ -31,7 +31,7 @@ export class AppComponent {
     this.cartSynchronize(email);
   }
 
-  synchronizeUser() {
+  synchronizeUser() { //try-catch
     const currentUserJson = localStorage.getItem('loggedInUser');
     let currUser = { email: '0', name: "Guest" };
     if (currentUserJson) currUser = JSON.parse(currentUserJson);

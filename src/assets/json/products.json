@@ -39,7 +39,7 @@
             "id": 3,
             "title": "Samsung Universe 9",
             "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
-            "price": 99920,
+            "price": 9920,
             "discount": "15",
             "rating": 4.09,
             "brand": "Samsung",
@@ -371,7 +371,7 @@
             "rating": 4.57,
             "brand": "Bake Parlor Big",
             "category": "groceries",
-            "thumbnail": "https://i.dummyjson.com/data/products/22/thumbnail.jpg",
+            "thumbnail": "https://i.dummyjson.com/data/products/22/2.jpg",
             "images": [
                 "https://i.dummyjson.com/data/products/22/1.jpg",
                 "https://i.dummyjson.com/data/products/22/2.jpg",
@@ -405,7 +405,7 @@
             "rating": 4.94,
             "brand": "fauji",
             "category": "groceries",
-            "thumbnail": "https://i.dummyjson.com/data/products/24/thumbnail.jpg",
+            "thumbnail": "https://i.dummyjson.com/data/products/24/1.jpg",
             "images": [
                 "https://i.dummyjson.com/data/products/24/1.jpg",
                 "https://i.dummyjson.com/data/products/24/2.jpg",
@@ -496,7 +496,7 @@
             "rating": 4.44,
             "brand": "luxury palace",
             "category": "home-decoration",
-            "thumbnail": "https://i.dummyjson.com/data/products/29/thumbnail.webp",
+            "thumbnail": "https://i.dummyjson.com/data/products/29/2.jpg",
             "images": [
                 "https://i.dummyjson.com/data/products/29/1.jpg",
                 "https://i.dummyjson.com/data/products/29/2.jpg",
