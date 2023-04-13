@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { user, userInfo, usersJson } from '../interfaces/user';
+import { userInfo, usersJson } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-
   constructor(private http: HttpClient) { }
 
   users !: Observable<usersJson>;

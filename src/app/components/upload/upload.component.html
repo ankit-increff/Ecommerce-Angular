@@ -1,17 +1,17 @@
 <div class="d-md-flex justify-content-between">
   <div class="col-12 col-md-5 col-lg-4">
     <div class="card border-0 shadow-sm">
-    <div class="card-body">
+    <form class="card-body" #uploadForm="ngForm" (ngSubmit)="submitHandler(uploadForm.value)">
       <h3>Upload Orders</h3>
       <div class="input-group mb-2 mt-3">
-        <input type="file" accept="text/csv" class="form-control no-border-on-focus" id="inputGroupFile01">
+        <input #fileInput="ngModel" type="file" accept="text/csv" class="form-control no-border-on-focus" id="inputGroupFile01" name="file" required ngModel>
       </div>
       <a class="d-block" href="../../assets/csv/sample.csv">Download Sample</a>
       <div class="text-end mt-2">
-        <button class="btn btn-secondary">Preview</button>
-        <button class="btn btn-red ms-2">Upload</button>
+        <button (click)="previewHandler(uploadForm.value)" class="btn btn-secondary">Preview</button>
+        <button (click)="uploadHandler(uploadForm.value)" class="btn btn-red ms-2">Upload</button>
       </div>
-    </div>
+    </form>
   </div>
   </div>
   <div class="col-12 col-md-6 mt-4 mt-md-0">

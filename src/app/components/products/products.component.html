@@ -79,26 +79,22 @@
             <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
               {{product.rating | number : '1.1-1'}} ⭐</div>
             <div class="card-body">
-              <h5 class="card-title mb-1">{{product.title}}</h5>
+              <h6 class="card-title mb-1">{{product.title}}</h6>
               <p class="mb-1 text-muted opacity-75 one-liner">{{product.description}}</p>
-              <h5 class="d-inline-block me-2">₹{{product.price | number : '1.2-2'}}</h5> <small><span
+              <h6 class="d-inline-block me-2">₹{{product.price | number : '1.2-2'}}</h6> <small><span
                   class="text-muted text-decoration-line-through">₹{{getMrp(product.price, product.discount) | number :
                   '1.2-2'}}</span> <span class="text-success ms-1">({{product.discount}}%
                   Off)</span></small>
               <div class="input-group w-fit" *ngIf="quantities.hasOwnProperty(product.id); else addToCartBtn" (click)="$event.stopPropagation()">
-                <button class="btn btn-outline-red border-end-0 px-2" (click)="decreaseCartHandler(product.id)">
-                  <span class="material-symbols-outlined">
-                    remove
-                  </span>
+                <button class="btn btn-sm btn-outline-red border-end-0 px-2" (click)="decreaseCartHandler(product.id)">
+                  -
                 </button>
                 <input type="text"
-                  class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
+                  class="border w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
                   value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)" placeholder="" aria-label="Example text with button addon"
                   aria-describedby="button-addon1">
-                <button class="btn btn-outline-red border-start-0 px-2" (click)="increaseCartHandler(product.id)">
-                  <span class="material-symbols-outlined">
-                    add
-                  </span>
+                <button class="btn btn-sm btn-outline-red border-start-0 px-2" (click)="increaseCartHandler(product.id)">
+                  +
                 </button>
               </div>
               <ng-template #addToCartBtn>

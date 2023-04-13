@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { ProductService } from '../services/product.service';
-import { product, quantityArray } from '../interfaces/products';
-import { UsersService } from '../services/users.service';
-import { CartService } from '../services/cart.service';
+import { ProductService } from '../../services/product.service';
+import { product, quantityArray } from '../../interfaces/products';
+import { UsersService } from '../../services/users.service';
+import { CartService } from '../../services/cart.service';
 
 
 @Component({
