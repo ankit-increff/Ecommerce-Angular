@@ -6,7 +6,8 @@
       <div class="d-flex align-items-baseline">
         <div class="col-5">
           <div class="form-floating mb-3">
-            <input class="form-control" id="min-price" placeholder="-">
+            <input class="form-control" id="min-price" placeholder="-" (keyup)="changeMinPrice($event)"
+              value="{{filters.minPrice ? filters.minPrice : ''}}">
             <label for="min-price">Min</label>
           </div>
         </div>
@@ -15,45 +16,50 @@
         </div>
         <div class="col-5">
           <div class="form-floating mb-3">
-            <input class="form-control" id="max-price" placeholder="-">
+            <input class="form-control" id="max-price" placeholder="-" (keyup)="changeMaxPrice($event)"
+              value="{{filters.maxPrice ? filters.maxPrice : ''}}">
             <label for="max-price">Max</label>
           </div>
         </div>
       </div>
 
       <h6 class="text-muted text-uppercase mt-3">Ratings</h6>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="rating" id="4-star">
-        <label class="form-check-label" for="4-star">
-          4★ & above
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="rating" id="3-star">
-        <label class="form-check-label" for="3-star">
-          3★ & above
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="rating" id="2-star">
-        <label class="form-check-label" for="2-star">
-          2★ & above
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="rating" id="1-star">
-        <label class="form-check-label" for="1-star">
-          1★ & above
-        </label>
-      </div>
+      <form #ratingForm="ngForm" (change)="ratingChangeHandler(ratingForm.value)">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="rating" id="4-star" value="4" ngModel>
+          <label class="form-check-label" for="4-star">
+            4★ & above
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="rating" id="3-star" value="3" ngModel>
+          <label class="form-check-label" for="3-star">
+            3★ & above
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="rating" id="2-star" value="2" ngModel>
+          <label class="form-check-label" for="2-star">
+            2★ & above
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="rating" id="1-star" value="1" ngModel>
+          <label class="form-check-label" for="1-star">
+            1★ & above
+          </label>
+        </div>
+      </form>
 
       <h6 class="text-muted text-uppercase mt-4">Brands</h6>
-      <div class="form-check" *ngFor="let i of products">
-        <input class="form-check-input" type="checkbox" name="brand" value="apple">
+      <form #brandForm="ngForm" (change)="brandChangeHandler(brandForm.value)">
+      <div class="form-check" *ngFor="let brand of allBrands">
+        <input class="form-check-input" type="checkbox" name="{{brand}}" value="{{brand}}" ngModel>
         <label class="form-check-label" for="apple">
-          Apple
+          {{brand}}
         </label>
       </div>
+    </form>
     </div>
     <div class="col-12 col-sm-10">
       <div class="d-flex justify-content-between filters">
@@ -62,12 +68,16 @@
           </span> Filters</button>
         <div class="dropdown">
           <button class="btn btn-light shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Sort by: <strong class="text-muted">{{sort}}</strong></button>
+            aria-expanded="false">Sort by: <strong class="text-muted">{{sortBy}}</strong></button>
           <ul class="dropdown-menu">
-            <li class="dropdown-item active">Relevance</li>
-            <li class="dropdown-item">Price low to high</li>
-            <li class="dropdown-item">Price high to low</li>
-            <li class="dropdown-item">Ratings</li>
+            <li class="dropdown-item" (click)="changeSorting('Relevance')" [ngClass]="{'active':sortBy == 'Relevance'}">
+              Relevance</li>
+            <li class="dropdown-item" (click)="changeSorting('Price low to high')"
+              [ngClass]="{'active':sortBy == 'Price low to high'}">Price low to high</li>
+            <li class="dropdown-item" (click)="changeSorting('Price high to low')"
+              [ngClass]="{'active':sortBy == 'Price high to low'}">Price high to low</li>
+            <li class="dropdown-item" (click)="changeSorting('Ratings')" [ngClass]="{'active':sortBy == 'Ratings'}">
+              Ratings</li>
           </ul>
         </div>
       </div>
@@ -75,7 +85,7 @@
         <div class="col" *ngFor="let product of products">
           <div class="card border-0 shadow-sm position-relative product-card" routerLink="product/{{product.id}}">
             <div class="img-aspect"><img class="img-fluid img-aspect rounded p-1 border-0" src="{{product.thumbnail}}"
-              alt="Image not Available"></div>
+                alt="Image not Available"></div>
             <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
               {{product.rating | number : '1.1-1'}} ⭐</div>
             <div class="card-body">
@@ -85,20 +95,21 @@
                   class="text-muted text-decoration-line-through">₹{{getMrp(product.price, product.discount) | number :
                   '1.2-2'}}</span> <span class="text-success ms-1">({{product.discount}}%
                   Off)</span></small>
-              <div class="input-group w-fit" *ngIf="quantities.hasOwnProperty(product.id); else addToCartBtn" (click)="$event.stopPropagation()">
+              <div class="input-group w-fit" *ngIf="quantities.hasOwnProperty(product.id); else addToCartBtn"
+                (click)="$event.stopPropagation()">
                 <button class="btn btn-sm btn-outline-red border-end-0 px-2" (click)="decreaseCartHandler(product.id)">
                   <span class="material-symbols-outlined">
                     remove
-                    </span>
+                  </span>
                 </button>
                 <input type="text"
                   class="border w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 quantity-input"
-                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)" 
-                  >
-                <button class="btn btn-sm btn-outline-red border-start-0 px-2" (click)="increaseCartHandler(product.id)">
+                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)">
+                <button class="btn btn-sm btn-outline-red border-start-0 px-2"
+                  (click)="increaseCartHandler(product.id)">
                   <span class="material-symbols-outlined">
                     add
-                    </span>
+                  </span>
                 </button>
               </div>
               <ng-template #addToCartBtn>
@@ -164,10 +175,10 @@
       </div>
 
       <h6 class="text-muted text-uppercase mt-4">Brands</h6>
-      <div class="form-check" *ngFor="let i of products">
-        <input class="form-check-input" type="checkbox" name="brand" value="apple">
-        <label class="form-check-label" for="apple">
-          Apple
+      <div class="form-check" *ngFor="let brand of allBrands">
+        <input class="form-check-input" type="checkbox" name="{{brand}}" value="{{brand}}">
+        <label class="form-check-label" for="{{brand}}">
+          {{brand}}
         </label>
       </div>
     </div>
@@ -177,5 +188,3 @@
       <button class="btn btn-red ms-2">Apply</button>
     </div>
   </ng-template>
-
-  
