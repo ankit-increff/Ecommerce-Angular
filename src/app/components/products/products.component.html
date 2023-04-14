@@ -87,14 +87,18 @@
                   Off)</span></small>
               <div class="input-group w-fit" *ngIf="quantities.hasOwnProperty(product.id); else addToCartBtn" (click)="$event.stopPropagation()">
                 <button class="btn btn-sm btn-outline-red border-end-0 px-2" (click)="decreaseCartHandler(product.id)">
-                  -
+                  <span class="material-symbols-outlined">
+                    remove
+                    </span>
                 </button>
                 <input type="text"
-                  class="border w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
-                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)" placeholder="" aria-label="Example text with button addon"
-                  aria-describedby="button-addon1">
+                  class="border w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 quantity-input"
+                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)" 
+                  >
                 <button class="btn btn-sm btn-outline-red border-start-0 px-2" (click)="increaseCartHandler(product.id)">
-                  +
+                  <span class="material-symbols-outlined">
+                    add
+                    </span>
                 </button>
               </div>
               <ng-template #addToCartBtn>

@@ -1,48 +1,55 @@
 <div class="d-md-flex justify-content-between">
   <div class="col-12 col-md-5 col-lg-4">
     <div class="card border-0 shadow-sm">
-    <form class="card-body" #uploadForm="ngForm" (ngSubmit)="submitHandler(uploadForm.value)">
-      <h3>Upload Orders</h3>
-      <div class="input-group mb-2 mt-3">
-        <input #fileInput="ngModel" type="file" accept="text/csv" class="form-control no-border-on-focus" id="inputGroupFile01" name="file" required ngModel>
-      </div>
-      <a class="d-block" href="../../assets/csv/sample.csv">Download Sample</a>
-      <div class="text-end mt-2">
-        <button (click)="previewHandler(uploadForm.value)" class="btn btn-secondary">Preview</button>
-        <button (click)="uploadHandler(uploadForm.value)" class="btn btn-red ms-2">Upload</button>
-      </div>
-    </form>
+      <form class="card-body" #uploadForm="ngForm" (ngSubmit)="submitHandler(uploadForm.value)">
+        <h3>Upload Orders</h3>
+        <div class="input-group mb-2 mt-3">
+          <input #fileInput="ngModel" (change)="changeHandler($event)" type="file" accept="text/csv"
+            class="form-control no-border-on-focus" id="inputGroupFile01" name="file" required ngModel>
+        </div>
+        <a class="d-block" href="../../assets/csv/sample.csv">Download Sample</a>
+        <div class="text-end mt-2">
+          <button (click)="previewHandler(uploadForm.value)" class="btn btn-secondary">Preview</button>
+          <button (click)="uploadHandler(uploadForm.value)" class="btn btn-red ms-2">Upload</button>
+        </div>
+      </form>
+    </div>
   </div>
-  </div>
-  <div class="col-12 col-md-6 mt-4 mt-md-0">
-    <table class="table shadow-sm">
-      <thead class="">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td colspan="2">Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="col-12 col-md-7 col-lg-7 mt-4 mt-md-0">
+    <div class="d-flex shadow-sm mb-2" *ngFor="let item of fileData">
+      <div class="col-12 col-sm-4 text-center"><img class="img-aspect p-1 rounded-2 c-pointer" src="{{item.product.thumbnail}}"
+          alt="" height="220px" (click)="openProduct(item.product.id)">
+      </div>
+      <div class="col py-3 position-relative">
+        <h6 class="text-muted mb-0 c-pointer" (click)="openProduct(item.product.id)">{{item.product.brand}}</h6>
+        <h5 class="mb-0 c-pointer" (click)="openProduct(item.product.id)">{{item.product.title}}</h5>
+        <p class="mb-2 opacity-75 one-liner">Lorem ipsum dolor sit amet.
+        </p>
+        <h5 class="d-inline-block me-2 fw-normal">{{item.product.price | currency: 'INR'}}</h5>
+        <div class="input-group mb-3">
+          <button class="btn btn-outline-red border-end-0 px-2" (click)="decreaseQuantityHandler(item.product.id)">
+            <span class="material-symbols-outlined">
+              remove
+            </span>
+          </button>
+          <input type="text"
+            class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
+            value="{{item.quantity}}" (keyup)="updateQuantityHandler(item.product.id, $event)"
+            aria-describedby="button-addon1">
+          <button class="btn btn-outline-red border-start-0 px-2" (click)="increaseQuantityHandler(item.product.id)">
+            <span class="material-symbols-outlined">
+              add
+            </span>
+          </button>
+        </div>
+        <h5 class="mb-0"><span class="fw-normal">Subtotal:</span> {{item.product.price * item.quantity |
+          currency: 'INR'}}</h5>
+
+        <button class="btn btn-outline-red position-absolute top-0 end-0 border-0 p-1 m-2" (click)="removeItemHandler(item.product.id)" data-bs-toggle="modal"
+          data-bs-target="#confirmRemoveModal"><span class="material-symbols-outlined">
+            delete
+          </span></button>
+      </div>
+    </div>
   </div>
 </div>

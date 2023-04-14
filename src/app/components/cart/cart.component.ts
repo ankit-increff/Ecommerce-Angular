@@ -73,8 +73,7 @@ export class CartComponent {
   }
 
   updateCartHandler(id:number, $event: any) {
-    console.log('updated');
-    this.cartService.updateCart(id, parseInt($event.target.value))
+    this.cartService.updateCart(id, parseInt($event.target.value));
   }
 
   setRemovingProduct(product: product)  {

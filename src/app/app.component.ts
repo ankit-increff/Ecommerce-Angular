@@ -29,6 +29,9 @@ export class AppComponent {
   synchronizeServices() {
     const email = this.synchronizeUser();
     this.cartSynchronize(email);
+    this.usersService.getCurrentUser().subscribe(data => {
+      this.cartSynchronize(data.email);
+    })
   }
 
   synchronizeUser() { //try-catch

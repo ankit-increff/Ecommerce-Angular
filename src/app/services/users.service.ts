@@ -26,4 +26,9 @@ export class UsersService {
     this.users = this.http.get<usersJson>('../../assets/json/users.json');
     return this.users;
   }
+
+  logoutHandler() {
+    localStorage.removeItem('loggedInUser');
+    this.setCurrentUser({name: 'Guest', email:'0'});
+  }
 }
