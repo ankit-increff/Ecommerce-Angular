@@ -15,3 +15,11 @@ export interface summary {
     amount: number,
     savings: number
   }
+
+export interface filter {
+    minPrice: number,
+    maxPrice: number,
+    brands:string[],
+    rating: number,
+    sortBy: string
+}

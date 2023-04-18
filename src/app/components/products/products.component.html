@@ -1,50 +1,58 @@
 <div class="container-fluid pt-2">
   <div class="row">
     <div class="col-2 d-none d-sm-block">
-      <h4 class="mb-3">Filters</h4>
+      <div class="d-flex justify-content-between"><h4 class="mb-3">Filters</h4> <button class="btn btn-secondary p-2" (click)="clearFilters()"><span class="material-symbols-outlined">
+        restart_alt
+        </span></button></div>
       <h6 class="text-muted text-uppercase">Price Range</h6>
-      <div class="d-flex align-items-baseline">
-        <div class="col-5">
-          <div class="form-floating mb-3">
-            <input class="form-control" id="min-price" placeholder="-" (keyup)="changeMinPrice($event)"
-              value="{{filters.minPrice ? filters.minPrice : ''}}">
-            <label for="min-price">Min</label>
+      <div>
+        <div class="d-flex align-items-baseline">
+          <div class="col-5">
+            <div class="mb-3">
+              <!-- <label for="min-price" class="form-label">Min</label> -->
+              <input class="form-control border-0 shadow-sm" id="min-price" placeholder="Min"
+                (keyup)="changeMinPrice($event)" value="{{filters.minPrice != intMin ? filters.minPrice : ''}}">
+            </div>
+          </div>
+          <div class="col d-flex">
+            <div class="mx-auto h-fit"> to </div>
+          </div>
+          <div class="col-5">
+            <div class="mb-3">
+              <!-- <label for="max-price" class="form-label">Max</label> -->
+              <input class="form-control border-0 shadow-sm" id="max-price" placeholder="Max"
+                (keyup)="changeMaxPrice($event)" value="{{filters.maxPrice!=intMax ? filters.maxPrice : ''}}">
+            </div>
           </div>
         </div>
-        <div class="col d-flex">
-          <div class="mx-auto h-fit"> to </div>
-        </div>
-        <div class="col-5">
-          <div class="form-floating mb-3">
-            <input class="form-control" id="max-price" placeholder="-" (keyup)="changeMaxPrice($event)"
-              value="{{filters.maxPrice ? filters.maxPrice : ''}}">
-            <label for="max-price">Max</label>
-          </div>
-        </div>
+        <small class="text-danger" *ngIf="priceFilterError()">{{priceFilterErrorMessage}}</small>
       </div>
-
       <h6 class="text-muted text-uppercase mt-3">Ratings</h6>
-      <form #ratingForm="ngForm" (change)="ratingChangeHandler(ratingForm.value)">
+      <form (change)="ratingChangeHandler($event)">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="rating" id="4-star" value="4" ngModel>
+          <input class="form-check-input" type="radio" name="rating" id="4-star" value="4"
+            [checked]="filters.rating==4">
           <label class="form-check-label" for="4-star">
             4★ & above
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="rating" id="3-star" value="3" ngModel>
+          <input class="form-check-input" type="radio" name="rating" id="3-star" value="3"
+            [checked]="filters.rating==3">
           <label class="form-check-label" for="3-star">
             3★ & above
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="rating" id="2-star" value="2" ngModel>
+          <input class="form-check-input" type="radio" name="rating" id="2-star" value="2"
+            [checked]="filters.rating==2">
           <label class="form-check-label" for="2-star">
             2★ & above
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="rating" id="1-star" value="1" ngModel>
+          <input class="form-check-input" type="radio" name="rating" id="1-star" value="1"
+            [checked]="filters.rating==1">
           <label class="form-check-label" for="1-star">
             1★ & above
           </label>
@@ -52,14 +60,14 @@
       </form>
 
       <h6 class="text-muted text-uppercase mt-4">Brands</h6>
-      <form #brandForm="ngForm" (change)="brandChangeHandler(brandForm.value)">
-      <div class="form-check" *ngFor="let brand of allBrands">
-        <input class="form-check-input" type="checkbox" name="{{brand}}" value="{{brand}}" ngModel>
-        <label class="form-check-label" for="apple">
-          {{brand}}
-        </label>
-      </div>
-    </form>
+      <form (change)="brandChangeHandler($event)">
+        <div class="form-check" *ngFor="let brand of allBrands">
+          <input class="form-check-input" type="checkbox" name="{{brand}}" value="{{brand}}" [checked]="filters.brands.includes(brand)">
+          <label class="form-check-label" for="apple">
+            {{brand}}
+          </label>
+        </div>
+      </form>
     </div>
     <div class="col-12 col-sm-10">
       <div class="d-flex justify-content-between filters">
@@ -68,15 +76,17 @@
           </span> Filters</button>
         <div class="dropdown">
           <button class="btn btn-light shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Sort by: <strong class="text-muted">{{sortBy}}</strong></button>
+            aria-expanded="false">Sort by: <strong class="text-muted">{{filters.sortBy}}</strong></button>
           <ul class="dropdown-menu">
-            <li class="dropdown-item" (click)="changeSorting('Relevance')" [ngClass]="{'active':sortBy == 'Relevance'}">
+            <li class="dropdown-item" (click)="changeSorting('Relevance')"
+              [ngClass]="{'active':filters.sortBy == 'Relevance'}">
               Relevance</li>
             <li class="dropdown-item" (click)="changeSorting('Price low to high')"
-              [ngClass]="{'active':sortBy == 'Price low to high'}">Price low to high</li>
+              [ngClass]="{'active':filters.sortBy == 'Price low to high'}">Price low to high</li>
             <li class="dropdown-item" (click)="changeSorting('Price high to low')"
-              [ngClass]="{'active':sortBy == 'Price high to low'}">Price high to low</li>
-            <li class="dropdown-item" (click)="changeSorting('Ratings')" [ngClass]="{'active':sortBy == 'Ratings'}">
+              [ngClass]="{'active':filters.sortBy == 'Price high to low'}">Price high to low</li>
+            <li class="dropdown-item" (click)="changeSorting('Ratings')"
+              [ngClass]="{'active':filters.sortBy == 'Ratings'}">
               Ratings</li>
           </ul>
         </div>
