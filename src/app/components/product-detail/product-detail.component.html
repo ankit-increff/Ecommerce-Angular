@@ -52,8 +52,8 @@
           </span>
         </button>
         <input type="text"
-          class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
-          (keyup)="updateCartHandler($event)" value="{{quantity}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+          class="w-3rem flex-grow-0 text-center text-red border border-start-0 border-red border-end-0 quantity-input"
+          (keyup)="updateCartHandler($event)" (blur)="refreshQuantity($event)" value="{{quantity}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
         <button class="btn btn-outline-red border-start-0 px-2" (click)="increaseCartHandler()">
           <span class="material-symbols-outlined">
             add

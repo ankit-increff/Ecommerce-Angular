@@ -19,3 +19,8 @@ export interface quantityArray {
     [id: number]: number;
 }
 
+export interface modalProduct {
+    id: number;
+    title: string;
+}
+

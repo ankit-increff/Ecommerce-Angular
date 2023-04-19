@@ -77,3 +77,7 @@ body {
 .img-aspect {
 	aspect-ratio: 1;
 }
+
+.quantity-input:focus, .quantity-input:active {
+    outline:none !important;
+}

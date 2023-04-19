@@ -2,7 +2,3 @@
     transform: scale(1.02);
     /* shadow: */
 }
-
-.quantity-input:focus, .quantity-input:active {
-    outline:none !important;
-}

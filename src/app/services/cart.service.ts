@@ -13,9 +13,9 @@ export class CartService {
   constructor(private usersService: UsersService, private productService: ProductService) { }
 
   currentCart = new BehaviorSubject<cartItem[]>([]);
+  currentCart$ = this.currentCart.asObservable();
   currentCartData:cartItem[] = [];
   totalQuantity = new Subject<number>();
-  currentCart$ = this.currentCart.asObservable();
 
   setCurrentCart(cartItems: cartItem[]) {
     this.currentCart.next(cartItems);

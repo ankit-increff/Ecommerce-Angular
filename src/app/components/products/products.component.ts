@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProductService } from '../../services/product.service';
 import { product, quantityArray } from '../../interfaces/products';
-import { UsersService } from '../../services/users.service';
 import { CartService } from '../../services/cart.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { filter } from 'src/app/interfaces/cart';
 import { ToastService } from 'src/app/services/toast.service';
+import { UtilService } from 'src/app/services/util.service';
+import { ModalService } from 'src/app/services/modal.service';
+
 
 @Component({
   selector: 'app-products',
@@ -15,13 +17,14 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class ProductsComponent {
   closeResult = '';
-  constructor(private offcanvasService: NgbOffcanvas, private productService: ProductService, private usersService: UsersService, private cartService: CartService, private filterService: FilterService, private toastService: ToastService) { }
+  constructor(private offcanvasService: NgbOffcanvas, private productService: ProductService, private cartService: CartService, private filterService: FilterService, private toastService: ToastService, private util: UtilService, private modalService: ModalService) { }
   
   products: product[] = [];
   quantities: quantityArray = {}
   intMax = 1e9+7;
   intMin = -1;
   priceFilterErrorMessage = '';
+
   //handle price filters and session storage change
   filters:filter = {
     minPrice: -1,
@@ -31,7 +34,7 @@ export class ProductsComponent {
     sortBy: 'Relevance'
   }
   allBrands:string[] = [];
-
+  confirmModal!:any;
   ngOnInit() {
     console.log('prodInitStarted');
     this.productService.products.subscribe(data => {
@@ -43,15 +46,15 @@ export class ProductsComponent {
       this.applyFilters();
     })
 
-    this.cartService.currentCartData.forEach(item => {
-      this.quantities[item.product.id] = item.quantity;
-    });  //page navigation safe
+    // this.cartService.currentCartData.forEach(item => {
+    //   this.quantities[item.product.id] = item.quantity;
+    // });  //page navigation safe
 
     this.cartService.currentCart$.subscribe(data => {
+      this.quantities = {};
       data.forEach(item => {
         this.quantities[item.product.id] = item.quantity;
       })
-      console.log("prod - syncedCart", this.quantities);
     })
 
     let filters = this.filterService.getAllFilters();
@@ -79,20 +82,40 @@ export class ProductsComponent {
   
   increaseCartHandler(id: number) {
     this.cartService.addToCart(id, 1);
-    this.toastService.handleSuccess('Item added to the cart')
-    
+    this.toastService.handleSuccess('Item quantity updated') 
   }
   
   decreaseCartHandler(id: number) {
+    if(this.quantities[id]==1) {
+      let currentProduct = this.products.find(product => product.id == id);
+      if(currentProduct) this.modalService.setRemovingProduct(currentProduct);
+      return;
+    }
     this.cartService.addToCart(id, -1);
-    this.toastService.handleSuccess('Item removed from the cart')
+    this.toastService.handleSuccess('Item quantity updated')
     
   }
 
+  refreshQuantity(id: number, event: any) {
+    event.target.value = this.quantities[id];
+  }
+
   updateCartHandler(id:number, $event: any) {
-    console.log('updated');
-    this.cartService.updateCart(id, parseInt($event.target.value))
+    let value = $event.target.value;
+    if(!this.util.verifyQuantity(value)) return;
+
+    if(value == '0') {
+      let currentProduct = this.products.find(product => product.id == id);
+      if(currentProduct) this.modalService.setRemovingProduct(currentProduct);
+      return;
+    }
+    this.cartService.updateCart(id, parseInt(value))
     this.toastService.handleSuccess('Cart items updated successfully')
+  }
+
+  removeFromCartHandler(id:number) {
+    console.log(id);
+    this.cartService.removeFromCart(id);
   }
 
   changeSorting(sort: string) {

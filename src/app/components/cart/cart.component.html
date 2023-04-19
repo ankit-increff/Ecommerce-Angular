@@ -7,17 +7,19 @@
                     <h5 class="d-inline-block ms-2">({{totalQuantity}} items)</h5>
                 </div>
                 <div class="w-fit px-0">
-                    <button class="btn btn-sm btn-outline-red border-0" data-bs-toggle="modal" data-bs-target="#confirmRemoveAllModal">Reset Cart</button>
+                    <button class="btn btn-sm btn-outline-red border-0" data-bs-toggle="modal"
+                        data-bs-target="#confirmRemoveAllModal">Clear Cart</button>
                 </div>
             </div>
             <div class="row shadow-sm mb-2" *ngFor="let item of cartItems">
                 <div class="col-12 col-sm-4 text-center"><img class="img-aspect p-1 rounded-2 c-pointer"
                         src="{{item.product.thumbnail}}" alt="" height="220px"
                         routerLink="../product/{{item.product.id}}"></div>
-                <div class="col py-3 position-relative">
-                    <h6 class="text-muted mb-0 c-pointer" routerLink="../product/{{item.product.id}}">{{item.product.brand}}</h6>
+                <div class="col-12 col-sm-8 py-3 position-relative">
+                    <h6 class="text-muted mb-0 c-pointer" routerLink="../product/{{item.product.id}}">
+                        {{item.product.brand}}</h6>
                     <h5 class="mb-0 c-pointer" routerLink="../product/{{item.product.id}}">{{item.product.title}}</h5>
-                    <p class="mb-2 opacity-75 one-liner">Lorem ipsum dolor sit amet.
+                    <p class="mb-2 opacity-75 one-liner">{{item.product.description}}
                     </p>
                     <h5 class="d-inline-block me-2 fw-normal">{{item.product.price | currency: 'INR'}}</h5>
                     <small>
@@ -32,8 +34,9 @@
                                 remove
                             </span>
                         </button>
-                        <input type="text"class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
-                            (keyup)="updateCartHandler(item.product.id, $event)" value="{{item.quantity}}"
+                        <input type="text"
+                            class="w-3rem flex-grow-0 text-center text-red border-start-0 border-red border border-end-0 quantity-input"
+                            (keyup)="updateCartHandler(item.product.id, $event)" (blur)="refreshQuantity(item.product.id, $event)" value="{{item.quantity}}"
                             placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                         <button class="btn btn-outline-red border-start-0 px-2"
                             (click)="increaseCartHandler(item.product.id)">
@@ -46,10 +49,10 @@
                         currency: 'INR'}}</h5>
 
                     <button class="btn btn-outline-red position-absolute top-0 end-0 border-0 p-1 m-2"
-                        data-bs-toggle="modal" data-bs-target="#confirmRemoveModal"
-                        (click)="setRemovingProduct(item.product)"><span class="material-symbols-outlined">
+                        (click)="removeFromCartHandler(item.product)"><span class="material-symbols-outlined">
                             delete
-                        </span></button>
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -78,7 +81,8 @@
                 </div>
                 <hr>
                 <p [ngClass]="'text-success '+ ((summary.savings > 0) ? '':'d-none')">You'll save
-                    <strong>{{summary.savings | currency:'INR'}}</strong> on this order.</p>
+                    <strong>{{summary.savings | currency:'INR'}}</strong> on this order.
+                </p>
                 <button class="btn btn-red w-100 text-center" (click)="placeOrderHandler()">Place Order</button>
             </div>
         </div>
@@ -86,39 +90,21 @@
     <ng-template #emptyCart>
         <ng-container *ngIf="orderItems.length==0; else orderPlaced">
             <div class="container-fluid- text-center pt-4">
-                <img src="../../../assets/images/empty-cart.jpg" alt="no items" style="height:50vh; max-width: 80vw;" class="mb-2 rounded-2">
+                <img src="../../../assets/images/empty-cart.jpg" alt="no items" style="height:50vh; max-width: 80vw;"
+                    class="mb-2 rounded-2">
                 <h1>Your cart is empty!</h1>
                 <a class="btn btn-primary" routerLink="/">Add more items</a>
-            </div></ng-container>
-        </ng-template>
-        <ng-template #orderPlaced>
+            </div>
+        </ng-container>
+    </ng-template>
+    <ng-template #orderPlaced>
         <div class="container text-center pt-4">
-        <img src="../../../assets/images/empty-cart.jpg" alt="no items" style="height:50vh" class="mb-2 rounded-2">
-        <h1>Your order has been placed</h1>
-        <a class="text-secondary fw-bold d-block" (click)="downloadAgain()">Download CSV again</a>
-        <a class="btn btn-primary mt-2" routerLink="/">Continue Shopping</a>
+            <img src="../../../assets/images/empty-cart.jpg" alt="no items" style="height:50vh" class="mb-2 rounded-2">
+            <h1>Your order has been placed</h1>
+            <a class="text-secondary fw-bold d-block" (click)="downloadAgain()">Download CSV again</a>
+            <a class="btn btn-primary mt-2" routerLink="/">Continue Shopping</a>
         </div>
     </ng-template>
-</div>
-
-<div class="modal fade" id="confirmRemoveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Remove Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to remove <strong>{{removingProduct ? removingProduct.title : ''}}</strong>
-                    from the cart?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                    (click)="removeFromCartHandler()">Confirm</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="modal fade" id="confirmRemoveAllModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

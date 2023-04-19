@@ -4,6 +4,9 @@ import { product } from '../../interfaces/products';
 import { CartService } from '../../services/cart.service';
 import { cartItem, summary } from '../../interfaces/cart';
 import { ToastService } from 'src/app/services/toast.service';
+import { ModalService } from 'src/app/services/modal.service';
+import { UtilService } from 'src/app/services/util.service';
+
 
 declare global {
   interface Navigator {
@@ -17,11 +20,10 @@ declare global {
 })
 
 export class CartComponent {
-  constructor(private cartService: CartService, private toastService: ToastService, private papa: Papa) { };
+  constructor(private cartService: CartService, private toastService: ToastService, private papa: Papa, private modalService: ModalService, private util:UtilService) { };
 
   cartItems: cartItem[] = [];
   summary!: summary;
-  removingProduct!: product;
   totalQuantity = 0;
   orderItems: any = [];
 
@@ -48,9 +50,7 @@ export class CartComponent {
       deliveryCharges: 0,
       amount: 0,
       savings: 0
-
     };
-    console.log(this.cartItems);
     this.cartItems.forEach(item => {
       let product = item.product;
       tempSummary.amount += product.price * item.quantity;
@@ -78,24 +78,38 @@ export class CartComponent {
   }
 
   decreaseCartHandler(id: number) {
+    let tempItem = this.cartItems.find(item => item.product.id == id);
+    if(tempItem && tempItem.quantity==1) {
+        this.modalService.setRemovingProduct(tempItem.product);
+        return;
+    }
+
     this.cartService.addToCart(id, -1);
     this.toastService.handleSuccess('Item removed from the cart!')
   }
 
+  refreshQuantity(id: number, event: any) {
+    let tempItem = this.cartItems.find(item => item.product.id == id);
+    if(tempItem) event.target.value = tempItem.quantity;
+  }
+
   updateCartHandler(id: number, $event: any) {
-    this.cartService.updateCart(id, parseInt($event.target.value));
+    let value = $event.target.value;
+    if(!this.util.verifyQuantity(value)) return;
+    if(value == '0') {
+      let tempItem = this.cartItems.find(item => item.product.id == id);
+      if(tempItem) {
+        this.modalService.setRemovingProduct(tempItem.product);
+        return;
+      }
+    }
+
+    this.cartService.updateCart(id, parseInt(value));
     this.toastService.handleSuccess('Cart items updated successfully')
   }
 
-  setRemovingProduct(product: product) {
-    this.removingProduct = product;
-  }
-
-  removeFromCartHandler() {
-    console.log('removing', this.removingProduct);
-    this.cartService.removeFromCart(this.removingProduct.id);
-    this.toastService.handleSuccess('Items removed successfully')
-
+  removeFromCartHandler(product:product) {
+    this.modalService.setRemovingProduct(product);
   }
 
   clearCartHandler() {
@@ -137,6 +151,7 @@ export class CartComponent {
     tempLink.click();
     tempLink.remove();
   }
+  
   downloadAgain() {
     this.downloadOrder();
     this.toastService.handleSuccess('Order has been downloaded again!!');

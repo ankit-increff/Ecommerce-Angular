@@ -16,6 +16,7 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from './components/toast/toast.component';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ToastComponent } from './components/toast/toast.component';
     ProductDetailComponent,
     PageNotFoundComponent,
     ToastComponent,
+    ConfirmationModalComponent,
   ],
   imports: [
     BrowserModule,

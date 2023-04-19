@@ -5,6 +5,8 @@ import { product } from '../../interfaces/products';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { UtilService } from 'src/app/services/util.service';
+import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,7 +15,7 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class ProductDetailComponent {
   private routeSub: Subscription = new Subscription();
-  constructor(private route:ActivatedRoute, private productService:ProductService, private router:Router, private cartService: CartService, private toastService: ToastService) {}
+  constructor(private route:ActivatedRoute, private productService:ProductService, private router:Router, private cartService: CartService, private toastService: ToastService, private util: UtilService, private modalService:ModalService) {}
 
   product !: product;
   id!: number;
@@ -29,18 +31,16 @@ export class ProductDetailComponent {
       })
     });
 
-    this.cartService.currentCartData.find(item => {
-      if(item.product.id == this.id) {
-        this.quantity = item.quantity;
-      }
-    });  //page navigation safe
+    // this.cartService.currentCartData.find(item => {
+    //   if(item.product.id == this.id) {
+    //     this.quantity = item.quantity;
+    //   }
+    // });  //page navigation safe
 
-    this.cartService.getCurrentCart().subscribe(data => {
-      data.find(item => {
-        if(item.product.id == this.id) {
-          this.quantity = item.quantity;
-        }
-      })
+    this.cartService.currentCart$.subscribe(data => {
+      let cartItem = data.find(item => item.product.id == this.id);
+      if(cartItem) this.quantity = cartItem.quantity;
+      else this.quantity = 0;
     })
   }
 
@@ -56,17 +56,32 @@ export class ProductDetailComponent {
   increaseCartHandler() {
     this.cartService.addToCart(this.id, 1);
     this.toastService.handleSuccess('Item added to the cart')
-
   }
 
   decreaseCartHandler() {
+    if(this.quantity==1) {
+      this.modalService.setRemovingProduct(this.product);
+      return;
+    }
     this.cartService.addToCart(this.id, -1);
     this.toastService.handleSuccess('Item removed from the cart')
   }
 
   updateCartHandler($event: any) {
-    console.log('updated');
+    let value = $event.target.value;
+    if(!this.util.verifyQuantity(value)) return;
+
+    if(value == '0') {
+      this.modalService.setRemovingProduct(this.product);
+      return;
+    }
+
+    this.cartService.updateCart(this.id, parseInt(value))
     this.cartService.updateCart(this.id, parseInt($event.target.value))
     this.toastService.handleSuccess('Item quantity updated successfully')
   }
+
+  refreshQuantity(event: any) {
+    event.target.value = this.quantity;
+  } 
 }

@@ -2,9 +2,8 @@
   <div class="row">
     <div class="col-2 d-none d-md-block">
       <div class="d-flex justify-content-between">
-        <h4 class="mb-3">Filters</h4> <button class="btn btn-secondary p-1 h-fit" (click)="clearFilters()"><span
-            class="material-symbols-outlined">
-            restart_alt
+        <h4 class="mb-3">Filters</h4> <button class="btn btn-secondary p-1 h-fit" (click)="clearFilters()"><span class="material-symbols-outlined fs-5">
+          filter_alt_off
           </span></button>
       </div>
       <h6 class="text-muted text-uppercase">Price Range</h6>
@@ -103,8 +102,8 @@
             <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
               {{product.rating | number : '1.1-1'}} ⭐</div>
             <div class="card-body">
-              <h6 class="card-title mb-1">{{product.title}}</h6>
-              <p class="mb-1 text-muted opacity-75 one-liner">{{product.description}}</p>
+              <h6 class="card-title mb-1 text-capitalize">{{product.title}}</h6>
+              <p class="mb-1 text-muted opacity-75 one-liner text-capitalize">{{product.description}}</p>
               <h6 class="d-inline-block me-2">₹{{product.price | number : '1.2-2'}}</h6> <small><span
                   class="text-muted text-decoration-line-through">₹{{getMrp(product.price, product.discount) | number :
                   '1.2-2'}}</span> <span class="text-success ms-1">({{product.discount}}%
@@ -118,7 +117,7 @@
                 </button>
                 <input type="text"
                   class="border w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 quantity-input"
-                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)">
+                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)" (blur)="refreshQuantity(product.id, $event)">
                 <button class="btn btn-sm btn-outline-red border-start-0 px-2"
                   (click)="increaseCartHandler(product.id)">
                   <span class="material-symbols-outlined">
@@ -202,3 +201,4 @@
       <button class="btn btn-red ms-2">Apply</button>
     </div>
   </ng-template>
+
