@@ -1,5 +1,5 @@
 <div class="container-fluid px-4">
-    <div class="row">
+    <div class="row" *ngIf="cartItems.length > 0; else emptyCart">
         <div class="col-12 col-lg-7">
             <div class="row justify-content-between align-items-center">
                 <div class="text-muted w-fit">
@@ -79,10 +79,26 @@
                 <hr>
                 <p [ngClass]="'text-success '+ ((summary.savings > 0) ? '':'d-none')">You'll save
                     <strong>{{summary.savings | currency:'INR'}}</strong> on this order.</p>
-                <button class="btn btn-red w-100 text-center">Place Order</button>
+                <button class="btn btn-red w-100 text-center" (click)="placeOrderHandler()">Place Order</button>
             </div>
         </div>
     </div>
+    <ng-template #emptyCart>
+        <ng-container *ngIf="orderItems.length==0; else orderPlaced">
+            <div class="container-fluid- text-center pt-4">
+                <img src="../../../assets/images/empty-cart.jpg" alt="no items" style="height:50vh; max-width: 80vw;" class="mb-2 rounded-2">
+                <h1>Your cart is empty!</h1>
+                <a class="btn btn-primary" routerLink="/">Add more items</a>
+            </div></ng-container>
+        </ng-template>
+        <ng-template #orderPlaced>
+        <div class="container text-center pt-4">
+        <img src="../../../assets/images/empty-cart.jpg" alt="no items" style="height:50vh" class="mb-2 rounded-2">
+        <h1>Your order has been placed</h1>
+        <a class="text-secondary fw-bold d-block" (click)="downloadAgain()">Download CSV again</a>
+        <a class="btn btn-primary mt-2" routerLink="/">Continue Shopping</a>
+        </div>
+    </ng-template>
 </div>
 
 <div class="modal fade" id="confirmRemoveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

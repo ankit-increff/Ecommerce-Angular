@@ -15,6 +15,7 @@ import { UtilsModule } from './utils/utils.module';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ToastComponent } from './components/toast/toast.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { FormsModule } from '@angular/forms';
     UploadComponent,
     ProductDetailComponent,
     PageNotFoundComponent,
+    ToastComponent,
   ],
   imports: [
     BrowserModule,

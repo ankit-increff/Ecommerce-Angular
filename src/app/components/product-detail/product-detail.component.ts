@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { product } from '../../interfaces/products';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -12,7 +13,7 @@ import { CartService } from '../../services/cart.service';
 })
 export class ProductDetailComponent {
   private routeSub: Subscription = new Subscription();
-  constructor(private route:ActivatedRoute, private productService:ProductService, private router:Router, private cartService: CartService) {}
+  constructor(private route:ActivatedRoute, private productService:ProductService, private router:Router, private cartService: CartService, private toastService: ToastService) {}
 
   product !: product;
   id!: number;
@@ -49,18 +50,23 @@ export class ProductDetailComponent {
 
   addToCartHandler() {
     this.cartService.addToCart(this.product.id, 1);
+    this.toastService.handleSuccess('Item added to the cart')
   }
 
   increaseCartHandler() {
     this.cartService.addToCart(this.id, 1);
+    this.toastService.handleSuccess('Item added to the cart')
+
   }
 
   decreaseCartHandler() {
     this.cartService.addToCart(this.id, -1);
+    this.toastService.handleSuccess('Item removed from the cart')
   }
 
   updateCartHandler($event: any) {
     console.log('updated');
     this.cartService.updateCart(this.id, parseInt($event.target.value))
+    this.toastService.handleSuccess('Item quantity updated successfully')
   }
 }

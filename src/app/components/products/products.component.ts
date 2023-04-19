@@ -6,7 +6,7 @@ import { UsersService } from '../../services/users.service';
 import { CartService } from '../../services/cart.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { filter } from 'src/app/interfaces/cart';
-
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-products',
@@ -15,8 +15,7 @@ import { filter } from 'src/app/interfaces/cart';
 })
 export class ProductsComponent {
   closeResult = '';
-  
-  constructor(private offcanvasService: NgbOffcanvas, private productService: ProductService, private usersService: UsersService, private cartService: CartService, private filterService: FilterService) { }
+  constructor(private offcanvasService: NgbOffcanvas, private productService: ProductService, private usersService: UsersService, private cartService: CartService, private filterService: FilterService, private toastService: ToastService) { }
   
   products: product[] = [];
   quantities: quantityArray = {}
@@ -48,7 +47,7 @@ export class ProductsComponent {
       this.quantities[item.product.id] = item.quantity;
     });  //page navigation safe
 
-    this.cartService.getCurrentCart().subscribe(data => {
+    this.cartService.currentCart$.subscribe(data => {
       data.forEach(item => {
         this.quantities[item.product.id] = item.quantity;
       })
@@ -58,6 +57,10 @@ export class ProductsComponent {
     let filters = this.filterService.getAllFilters();
     if(filters) this.filters = filters;
     this.applyFilters();
+  }
+
+  triggerToast(message: string) {
+    this.toastService.handleSuccess(message);
   }
 
   getMrp(price: number, discount: number) {
@@ -71,19 +74,25 @@ export class ProductsComponent {
   addToCartHandler($event: any, product: product) {
     $event.stopPropagation();
     this.cartService.addToCart(product.id, 1);
+    this.toastService.handleSuccess('Item added to the cart')
   }
   
   increaseCartHandler(id: number) {
     this.cartService.addToCart(id, 1);
+    this.toastService.handleSuccess('Item added to the cart')
+    
   }
-
+  
   decreaseCartHandler(id: number) {
     this.cartService.addToCart(id, -1);
+    this.toastService.handleSuccess('Item removed from the cart')
+    
   }
 
   updateCartHandler(id:number, $event: any) {
     console.log('updated');
     this.cartService.updateCart(id, parseInt($event.target.value))
+    this.toastService.handleSuccess('Cart items updated successfully')
   }
 
   changeSorting(sort: string) {

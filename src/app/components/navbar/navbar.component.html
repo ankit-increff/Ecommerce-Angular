@@ -22,7 +22,7 @@
             <button class="btn btn-light shadow-sm dropdown-toggle fw-bold text-muted" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               {{userName}}
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end c-pointer">
               <li><a class="dropdown-item" routerLink="/upload">Upload Orders</a></li>
               <li><a class="dropdown-item" (click)="loggingHandler()">{{userName=='Guest' ? 'Login' : 'Logout'}}</a></li>
             </ul>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { cartItem, itemMap} from '../interfaces/cart'
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { UsersService } from './users.service';
 import { product } from '../interfaces/products';
 import { ProductService } from './product.service';
@@ -12,9 +12,10 @@ export class CartService {
 
   constructor(private usersService: UsersService, private productService: ProductService) { }
 
-  currentCart = new Subject<cartItem[]>();
+  currentCart = new BehaviorSubject<cartItem[]>([]);
   currentCartData:cartItem[] = [];
   totalQuantity = new Subject<number>();
+  currentCart$ = this.currentCart.asObservable();
 
   setCurrentCart(cartItems: cartItem[]) {
     this.currentCart.next(cartItems);
@@ -97,5 +98,4 @@ export class CartService {
     localStorage.setItem('cart-data', JSON.stringify(cartData));
     this.setCurrentCart([]);
   }
-
 }
