@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ToastService } from 'src/app/services/toast.service';
 declare var bootstrap: any;
 
@@ -10,20 +10,31 @@ declare var bootstrap: any;
 export class ToastComponent {
 
   constructor(private toastService: ToastService) {}
-  message: string = "";
+  successMessage: string = "";
+  errorMessage: string = "";
 
+  @ViewChild('successToast') successToastRef!: ElementRef
+  @ViewChild('errorToast') errorToastRef!: ElementRef
+
+  successToast!:any;
+  errorToast!:any;
+
+  ngAfterViewInit() {
+    this.successToast = new bootstrap.Toast(this.successToastRef.nativeElement);
+    this.errorToast = new bootstrap.Toast(this.errorToastRef.nativeElement);
+
+  }
   ngOnInit() {    
     this.toastService.showToast.subscribe(data => {
-      this.message = data.message;
       if(data.type == 'success')  {
-        const toastElement= document.getElementById('successToast')
-        const toast = new bootstrap.Toast(toastElement)
-        toast.show()
+        this.successMessage = data.message;
+        this.errorToast.hide();
+        this.successToast.show();
         
       } else if(data.type == 'error') {
-        const toastElement= document.getElementById('errorToast')
-        const toast = new bootstrap.Toast(toastElement)
-        toast.show()
+        this.errorMessage = data.message;
+        this.successToast.hide();
+        this.errorToast.show();
       }
     })
   }

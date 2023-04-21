@@ -1,54 +1,145 @@
-<div class="d-md-flex justify-content-between">
-  <div class="col-12 col-md-5 col-lg-4">
-    <div class="card border-0 shadow-sm">
-      <form class="card-body" #uploadForm="ngForm" (ngSubmit)="submitHandler(uploadForm.value)">
-        <h3>Upload Orders</h3>
-        <div class="input-group mb-2 mt-3">
-          <input #fileInput="ngModel" (change)="changeHandler($event)" type="file" accept="text/csv"
-            class="form-control no-border-on-focus" id="inputGroupFile01" name="file" required ngModel>
+<div class="row align-items-center gap-4">
+  <div class="col-12 col-md-5 ms-3">
+    <form class="" #uploadForm="ngForm" (ngSubmit)="submitHandler(uploadForm.value)">
+      <h4>Upload Orders</h4>
+      <div class="d-flex mb-2 mt-3">
+        <input #fileInput="ngModel" (change)="changeHandler($event)" type="file" accept="text/csv"
+          class="form-control no-border-on-focus" id="inputGroupFile01" name="file" #uploadInput required ngModel>
+        <button (click)="uploadHandler()" class="btn btn-blue ms-2">Preview</button>
+      </div>
+      <a class="d-block" href="../../assets/csv/sample.csv" #scrolling>Download Sample</a>
+    </form>
+  </div>
+  <div class="row" *ngIf="!errorData.length && fileData.length > 0; else noOrder">
+    <div class="col-12 col-lg-8">
+      <div class="row shadow-sm mb-2" *ngFor="let item of fileData">
+        <div class="col-12 col-sm-4 text-center"><img class="img-aspect p-1 rounded-2 c-pointer"
+            src="{{item.product.thumbnail}}" alt="{{item.product.title}}" height="220px"
+            (click)="openProduct(item.product.id)">
         </div>
-        <a class="d-block" href="../../assets/csv/sample.csv">Download Sample</a>
-        <div class="text-end mt-2">
-          <button (click)="previewHandler(uploadForm.value)" class="btn btn-secondary">Preview</button>
-          <button (click)="uploadHandler(uploadForm.value)" class="btn btn-red ms-2">Upload</button>
+        <div class="col-12 col-sm-8 py-3 position-relative">
+          <h6 class="text-muted mb-0 c-pointer" (click)="openProduct(item.product.id)">{{item.product.brand}}</h6>
+          <h5 class="mb-0 c-pointer" (click)="openProduct(item.product.id)">{{item.product.title}}</h5>
+          <p class="mb-2 opacity-75 one-liner">{{item.product.description}}
+          </p>
+          <h5 class="d-inline-block me-2 fw-normal">{{item.product.price | currency: 'INR'}}</h5>
+          <div class="input-group mb-3">
+            <button class="btn btn-outline-red border-end-0 px-2" (click)="decreaseQuantityHandler(item.product.id)">
+              <span class="material-symbols-outlined">
+                remove
+              </span>
+            </button>
+            <input type="text"
+              class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
+              value="{{item.quantity}}" (keyup)="updateQuantityHandler(item.product.id, $event)"
+              (blur)="refreshQuantity(item.product.id, $event)" aria-describedby="button-addon1">
+            <button class="btn btn-outline-red border-start-0 px-2" (click)="increaseQuantityHandler(item.product.id)">
+              <span class="material-symbols-outlined">
+                add
+              </span>
+            </button>
+          </div>
+          <h5 class="mb-0"><span class="fw-normal">Subtotal:</span> {{item.product.price * item.quantity |
+            currency: 'INR'}}</h5>
+
+          <button class="btn btn-outline-red position-absolute top-0 end-0 border-0 p-1 m-2"
+            (click)="removeClickHandler(item.product.id)"><span class="material-symbols-outlined">
+              delete
+            </span></button>
         </div>
-      </form>
+      </div>
+    </div>
+    <div class="col-12 col-lg-3 mt-4 mt-lg-0 offset-lg-1 px-0">
+      <div class="shadow-sm p-2 sticky-top summary-div">
+        <h4 class="text-muted">Order Summary</h4>
+        <hr>
+        <div class="d-flex justify-content-between">
+          <div>Total Mrp</div>
+          <div>{{summary.totalMrp | currency:'INR'}}</div>
+        </div>
+        <div class="d-flex justify-content-between text-success">
+          <div class="fw-bold">Discount</div>
+          <div>-{{summary.discount | currency:'INR'}}</div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <div [ngClass]="summary.deliveryCharges == 0 ? 'text-success':''">Delivery Charges</div>
+          <div *ngIf="summary.deliveryCharges != 0">{{summary.deliveryCharges | currency:'INR'}}</div>
+          <div *ngIf="summary.deliveryCharges == 0" class="text-success">FREE <span
+              class="text-decoration-line-through">₹49.00</span></div>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between">
+          <div class="h5">Total Amount</div>
+          <div class="h5">{{summary.amount | currency:'INR'}}</div>
+        </div>
+        <hr>
+        <p [ngClass]="'text-success '+ ((summary.savings > 0) ? '':'d-none')">You'll save
+          <strong>{{summary.savings | currency:'INR'}}</strong> on this order.
+        </p>
+        <button class="btn btn-red w-100 text-center" (click)="placeOrderHandler()">Place Order</button>
+      </div>
     </div>
   </div>
-  <div class="col-12 col-md-7 col-lg-7 mt-4 mt-md-0">
-    <div class="d-flex shadow-sm mb-2" *ngFor="let item of fileData">
-      <div class="col-12 col-sm-4 text-center"><img class="img-aspect p-1 rounded-2 c-pointer" src="{{item.product.thumbnail}}"
-          alt="" height="220px" (click)="openProduct(item.product.id)">
-      </div>
-      <div class="col py-3 position-relative">
-        <h6 class="text-muted mb-0 c-pointer" (click)="openProduct(item.product.id)">{{item.product.brand}}</h6>
-        <h5 class="mb-0 c-pointer" (click)="openProduct(item.product.id)">{{item.product.title}}</h5>
-        <p class="mb-2 opacity-75 one-liner">Lorem ipsum dolor sit amet.
-        </p>
-        <h5 class="d-inline-block me-2 fw-normal">{{item.product.price | currency: 'INR'}}</h5>
-        <div class="input-group mb-3">
-          <button class="btn btn-outline-red border-end-0 px-2" (click)="decreaseQuantityHandler(item.product.id)">
-            <span class="material-symbols-outlined">
-              remove
-            </span>
-          </button>
-          <input type="text"
-            class="form-control w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 no-border-on-focus"
-            value="{{item.quantity}}" (keyup)="updateQuantityHandler(item.product.id, $event)"
-            aria-describedby="button-addon1">
-          <button class="btn btn-outline-red border-start-0 px-2" (click)="increaseQuantityHandler(item.product.id)">
-            <span class="material-symbols-outlined">
-              add
-            </span>
-          </button>
-        </div>
-        <h5 class="mb-0"><span class="fw-normal">Subtotal:</span> {{item.product.price * item.quantity |
-          currency: 'INR'}}</h5>
 
-        <button class="btn btn-outline-red position-absolute top-0 end-0 border-0 p-1 m-2" (click)="removeItemHandler(item.product.id)" data-bs-toggle="modal"
-          data-bs-target="#confirmRemoveModal"><span class="material-symbols-outlined">
-            delete
-          </span></button>
+  <ng-template #noOrder>
+    <ng-container *ngIf="errorData.length>0; else noPreview">
+      <div class="col-12 col-lg-7">
+        <table class="table text-danger shadow-sm table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Row</th>
+              <th scope="col">Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let error of errorData">
+              <th scope="row">{{error.row}}</th>
+              <td>{{error.message}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #noPreview>
+    <ng-container *ngIf="orderItems.length==0; else orderPlaced">
+      <div class="container-fluid text-center pt-5 opacity-50">
+        <img src="../../../assets/images/file-preview.svg" alt="no items" style="height:30vh; max-width: 80vw;"
+          class="mb-2 rounded-2">
+        <h4>Order preview will appear here...</h4>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #orderPlaced>
+    <div class="container text-center pt-5 opacity-75 ">
+      <img src="../../../assets/images/order-placed.svg" alt="Order Placed" style="height:30vh" class="mb-2 rounded-2">
+      <h4>Your order has been placed</h4>
+      <a class="text-secondary fw-bold d-block" (click)="downloadAgain()">Download CSV again</a>
+      <!-- <a class="btn btn-primary mt-2" routerLink="/">Continue Shopping</a> -->
+    </div>
+  </ng-template>
+</div>
+
+
+<div class="modal fade" id="confirmRemoveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  #modal>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title align-items-center d-flex"><span class="material-icons text-warning me-2">
+            warning
+          </span> Remove Confirmation</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove <strong>{{removingProduct ? removingProduct.title : ''}}</strong>
+          from the cart?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+        (click)="removeFromFileHandler()">Yes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
       </div>
     </div>
   </div>

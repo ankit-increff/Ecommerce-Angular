@@ -33,6 +33,7 @@ export class ProductsComponent {
     rating: 0,
     sortBy: 'Relevance'
   }
+  
   allBrands:string[] = [];
   confirmModal!:any;
   ngOnInit() {

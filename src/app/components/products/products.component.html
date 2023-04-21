@@ -2,8 +2,9 @@
   <div class="row">
     <div class="col-2 d-none d-md-block">
       <div class="d-flex justify-content-between">
-        <h4 class="mb-3">Filters</h4> <button class="btn btn-secondary p-1 h-fit" (click)="clearFilters()"><span class="material-symbols-outlined fs-5">
-          filter_alt_off
+        <h4 class="mb-3">Filters</h4> <button class="btn btn-secondary p-1 h-fit" (click)="clearFilters()"><span
+            class="material-symbols-outlined fs-5">
+            filter_alt_off
           </span></button>
       </div>
       <h6 class="text-muted text-uppercase">Price Range</h6>
@@ -74,7 +75,8 @@
     </div>
     <div class="col-12 col-md-10">
       <div class="d-flex justify-content-between justify-content-md-end filters">
-        <button class="btn btn-light shadow-sm d-flex d-md-none" (click)="open(content)"><span class="material-symbols-outlined">
+        <button class="btn btn-light shadow-sm d-flex d-md-none" (click)="open(content)"><span
+            class="material-symbols-outlined">
             filter_alt
           </span> Filters</button>
         <div class="dropdown">
@@ -94,9 +96,11 @@
           </ul>
         </div>
       </div>
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-0">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-0"
+        *ngIf="products.length > 0; else noResult">
         <div class="col" *ngFor="let product of products">
-          <div class="card border-0 shadow-sm position-relative product-card c-pointer" routerLink="product/{{product.id}}">
+          <div class="card border-0 shadow-sm position-relative product-card c-pointer"
+            routerLink="product/{{product.id}}">
             <div class="img-aspect"><img class="img-fluid img-aspect rounded p-1 border-0" src="{{product.thumbnail}}"
                 alt="Image not Available"></div>
             <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
@@ -117,7 +121,8 @@
                 </button>
                 <input type="text"
                   class="border w-3rem flex-grow-0 text-center text-red border-start-0 border-red border-end-0 quantity-input"
-                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)" (blur)="refreshQuantity(product.id, $event)">
+                  value="{{quantities[product.id]}}" (keyup)="updateCartHandler(product.id, $event)"
+                  (blur)="refreshQuantity(product.id, $event)">
                 <button class="btn btn-sm btn-outline-red border-start-0 px-2"
                   (click)="increaseCartHandler(product.id)">
                   <span class="material-symbols-outlined">
@@ -132,6 +137,12 @@
           </div>
         </div>
       </div>
+      <ng-template #noResult>
+        <div class="container-fluid text-center pt-5 opacity-75">
+          <img class="no-product mb-3" src="../../../assets/images/no-results.png" alt="No results">
+          <h4>No product matches with your applied filters...</h4>
+        </div>
+      </ng-template>
     </div>
   </div>
 
@@ -201,4 +212,3 @@
       <button class="btn btn-red ms-2">Apply</button>
     </div>
   </ng-template>
-

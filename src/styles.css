@@ -1,7 +1,9 @@
 :root {
 	--red: rgb(231,96,104);
 	--redDark: rgb(200, 80, 88);
-	--gray: #ced4da
+	--gray: #ced4da;
+	--blue: rgb(21,44,84);
+	--blueDark: rgb(15,34,64);
 }
 
 html {
@@ -25,9 +27,17 @@ body {
 	background-color: var(--red);
 	color: white;
 }
+.btn-blue, .btn-outline-blue:hover {
+	background-color: var(--blue);
+	color: white;
+}
 
 .btn-red:hover {
 	background-color: var(--redDark);
+	color: white;
+}
+.btn-blue:hover {
+	background-color: var(--blueDark);
 	color: white;
 }
 

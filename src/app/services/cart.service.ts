@@ -13,7 +13,7 @@ export class CartService {
   constructor(private usersService: UsersService, private productService: ProductService) { }
 
   currentCart = new BehaviorSubject<cartItem[]>([]);
-  currentCart$ = this.currentCart.asObservable();
+  currentCart$ = this.currentCart.asObservable();  //private
   currentCartData:cartItem[] = [];
   totalQuantity = new Subject<number>();
 
@@ -28,7 +28,7 @@ export class CartService {
     return this.currentCart.asObservable();
   }
 
-  addToCart(id:number, quantity:number) {
+  addToCart(id:number, quantity:number):void {
     let cartData = JSON.parse(localStorage.getItem('cart-data') || ''),
     email = this.usersService.userData.email,
     userCart = cartData[email];
