@@ -11,7 +11,7 @@ import { ModalService } from 'src/app/services/modal.service';
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.css']
+  styleUrls: ['./product-detail.component.scss']
 })
 export class ProductDetailComponent {
   private routeSub: Subscription = new Subscription();

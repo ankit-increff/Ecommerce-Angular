@@ -7,7 +7,7 @@ import { cartItem, itemMap } from './interfaces/cart';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'ecommerce';

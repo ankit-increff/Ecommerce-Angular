@@ -3,15 +3,16 @@ import { user, userInfo } from '../../interfaces/user';
 import { UsersService } from '../../services/users.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
 })
 
 export class LoginComponent {
-  constructor(private userService: UsersService, private route: Router) { }
+  constructor(private userService: UsersService, private route: Router, private toastService:ToastService) { }
 
   users !: user[];
 
@@ -38,15 +39,12 @@ export class LoginComponent {
         this.userService.setCurrentUser(userDetail);
         this.route.navigate(['/']);
       } else {
-        alert('invalid password')
+        this.toastService.handleError('invalid password')
       }
     } else {
-      alert("invalid email");
+      this.toastService.handleError("invalid email");
     }    
   }
 
-  loginForm = new FormGroup({
-    username: new FormControl('',Validators.required),
-    password: new FormControl('', Validators.required)
-  })
+ 
 }

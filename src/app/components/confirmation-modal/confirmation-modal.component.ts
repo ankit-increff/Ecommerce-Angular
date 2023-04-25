@@ -8,7 +8,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-confirmation-modal',
   templateUrl: './confirmation-modal.component.html',
-  styleUrls: ['./confirmation-modal.component.css']
+  styleUrls: ['./confirmation-modal.component.scss']
 })
 export class ConfirmationModalComponent {
   constructor(private cartService: CartService, private modalService: ModalService, private toastService: ToastService) {} 

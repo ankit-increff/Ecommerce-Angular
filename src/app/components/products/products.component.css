@@ -1,9 +1,0 @@
-.product-card:hover {
-    transform: scale(1.02);
-    /* shadow: */
-}
-
-.no-product {
-    height: 40vh;
-    max-width: 80vw;
-}
