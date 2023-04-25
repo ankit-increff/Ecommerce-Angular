@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { cartItem, itemMap} from '../interfaces/cart'
+import { cartItem, itemMap} from '../interfaces/Cart.types'
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { UsersService } from './users.service';
-import { product } from '../interfaces/products';
+import { product } from '../interfaces/Products.types';
 import { ProductService } from './product.service';
 
 @Injectable({

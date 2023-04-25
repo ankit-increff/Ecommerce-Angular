@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ProductService } from './services/product.service';
 import { UsersService } from './services/users.service';
 import { CartService } from './services/cart.service';
-import { cartItem, itemMap } from './interfaces/cart';
+import { cartItem, itemMap } from './interfaces/Cart.types';
 
 @Component({
   selector: 'app-root',

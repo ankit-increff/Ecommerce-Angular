@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProductService } from '../../services/product.service';
-import { product, quantityArray } from '../../interfaces/products';
+import { product, quantityArray } from '../../interfaces/Products.types';
 import { CartService } from '../../services/cart.service';
 import { FilterService } from 'src/app/services/filter.service';
-import { filter } from 'src/app/interfaces/cart';
+import { filter } from 'src/app/interfaces/Cart.types';
 import { ToastService } from 'src/app/services/toast.service';
 import { UtilService } from 'src/app/services/util.service';
 import { ModalService } from 'src/app/services/modal.service';

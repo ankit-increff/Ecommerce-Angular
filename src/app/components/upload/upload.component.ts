@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Papa } from 'ngx-papaparse';
-import { cartItem, summary } from 'src/app/interfaces/cart';
-import { product } from 'src/app/interfaces/products';
+import { cartItem, summary } from 'src/app/interfaces/Cart.types';
+import { product } from 'src/app/interfaces/Products.types';
 import { ProductService } from 'src/app/services/product.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UtilService } from 'src/app/services/util.service';

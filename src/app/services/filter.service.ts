@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { filter } from '../interfaces/cart';
+import { filter } from '../interfaces/Cart.types';
 
 @Injectable({
   providedIn: 'root'

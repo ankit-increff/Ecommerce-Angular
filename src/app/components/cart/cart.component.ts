@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Papa } from 'ngx-papaparse';
-import { product } from '../../interfaces/products';
+import { product } from '../../interfaces/Products.types';
 import { CartService } from '../../services/cart.service';
-import { cartItem, summary } from '../../interfaces/cart';
+import { cartItem, summary } from '../../interfaces/Cart.types';
 import { ToastService } from 'src/app/services/toast.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { UtilService } from 'src/app/services/util.service';
