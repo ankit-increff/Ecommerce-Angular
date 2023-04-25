@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ProductService } from './services/product.service';
 import { UsersService } from './services/users.service';
 import { CartService } from './services/cart.service';
-import { cartItem } from './interfaces/cart';
+import { cartItem, itemMap } from './interfaces/cart';
 
 @Component({
   selector: 'app-root',
@@ -19,17 +19,13 @@ export class AppComponent {
     this.synchronizeServices();
   }
 
-  ngAfterViewInit() {
-  }
-
   cartInitializer() {
     if (!localStorage.getItem('cart-data')) localStorage.setItem('cart-data', JSON.stringify({ 0: {} }));
   }
 
   synchronizeServices() {
-    const email = this.synchronizeUser();
-    this.cartSynchronize(email);
-    this.usersService.getCurrentUser().subscribe(data => {
+    this.synchronizeUser();
+    this.usersService.getCurrentUser$.subscribe(data => {
       this.cartSynchronize(data.email);
     })
   }
@@ -39,17 +35,28 @@ export class AppComponent {
     let currUser = { email: '0', name: "Guest" };
     if (currentUserJson) currUser = JSON.parse(currentUserJson);
     this.usersService.setCurrentUser(currUser);
-    console.log("syncedUserService");
     return currUser.email;
   }
 
   cartSynchronize(email:string) {
-    const cartData = JSON.parse(localStorage.getItem('cart-data') || "");
+    let cartData = JSON.parse(localStorage.getItem('cart-data') || "");
+
+    if(!cartData[0]) cartData[0] = {};
+
     if (!(email in cartData)) {
-      cartData[email] = {};
-      localStorage.setItem('cart-data', JSON.stringify(cartData));
+      cartData[email] = cartData[0];
     }
-    const userCart = cartData[email];
+
+    let userCart = cartData[email],
+    localCart = cartData[0];
+
+    if(email!='0') {
+      userCart = this.mergeCarts(userCart, localCart);
+      cartData[0] = {};
+      cartData[email] = userCart;
+    }
+    localStorage.setItem('cart-data', JSON.stringify(cartData));
+
     this.productService.products.subscribe(data => {
       let products = data.products;
       let items:cartItem[] = [];
@@ -58,8 +65,15 @@ export class AppComponent {
         if(product) items.push({ product, quantity: userCart[id] });
       }
       this.cartService.setCurrentCart(items);
-      console.log('syncedCartService', items);
     })
+  }
+
+  mergeCarts(userCart: itemMap, localCart: itemMap): itemMap {
+    for(let i in localCart) {
+      if(userCart.hasOwnProperty(i)) userCart[i]+= localCart[i];
+      else userCart[i] = localCart[i];
+    }
+    return userCart;
   }
 
   getMrp(price: number, discount: number) {

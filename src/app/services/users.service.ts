@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { userInfo, usersJson } from '../interfaces/user';
 
 @Injectable({
@@ -10,7 +10,8 @@ export class UsersService {
   constructor(private http: HttpClient) { }
 
   users !: Observable<usersJson>;
-  currentUser = new Subject<userInfo>();
+  currentUser = new BehaviorSubject<userInfo>({email: '0', name: "Guest" });
+  getCurrentUser$ = this.currentUser.asObservable();
   userData !: userInfo;
 
   setCurrentUser(user: userInfo) {

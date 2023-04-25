@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-2 d-none d-md-block">
       <div class="d-flex justify-content-between">
-        <h4 class="mb-3">Filters</h4> <button class="btn btn-secondary p-1 h-fit" (click)="clearFilters()"><span
+        <h4 class="mb-3">Filters</h4> <button class="btn btn-blue p-1 h-fit" (click)="clearFilters()"><span
             class="material-symbols-outlined fs-5">
             filter_alt_off
           </span></button>
@@ -103,7 +103,7 @@
             routerLink="product/{{product.id}}">
             <div class="img-aspect"><img class="img-fluid img-aspect rounded p-1 border-0" src="{{product.thumbnail}}"
                 alt="Image not Available"></div>
-            <div class="rating position-absolute bg-light top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
+            <div class="rating position-absolute bg-light bg-opacity-75 top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
               {{product.rating | number : '1.1-1'}} ⭐</div>
             <div class="card-body">
               <h6 class="card-title mb-1 text-capitalize">{{product.title}}</h6>

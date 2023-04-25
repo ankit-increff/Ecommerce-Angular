@@ -20,9 +20,9 @@ export class LoginComponent {
       this.users = data.credentials;
     });
 
-    this.userService.getCurrentUser().subscribe(data => {
+    this.userService.getCurrentUser$.subscribe(data => {
       console.warn(data);
-      if(data) this.route.navigate(['/']);   //handle
+      if(data.email!='0') this.route.navigate(['/']);   //handle
     }) 
   }
 
