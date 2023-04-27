@@ -27,7 +27,11 @@ export class ProductDetailComponent {
       this.productService.products.subscribe(data => {
         let product = data.products.find(prod => prod.id == this.id);
         if(product) this.product =  product;
-        else this.router.navigate(['/']);  //give message: url does not exist
+        else 
+        {
+          this.router.navigate(['/']);
+          this.toastService.handleError('Product not found!')
+        }
       })
     });
 

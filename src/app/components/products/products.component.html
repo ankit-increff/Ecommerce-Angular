@@ -1,6 +1,6 @@
 <div class="container-fluid pt-2">
   <div class="row">
-    <div class="col-2 d-none d-md-block">
+    <div class="col-2 d-none d-lg-block">
       <div class="d-flex justify-content-between">
         <h4 class="mb-3">Filters</h4> <button class="btn btn-blue p-1 h-fit" (click)="clearFilters()"><span
             class="material-symbols-outlined fs-5">
@@ -73,12 +73,15 @@
         </div>
       </form>
     </div>
-    <div class="col-12 col-md-10">
-      <div class="d-flex justify-content-between justify-content-md-end filters">
-        <button class="btn btn-light shadow-sm d-flex d-md-none" (click)="open(content)"><span
+    <div class="col-12 col-lg-10">
+      <div class="d-flex justify-content-between justify-content-lg-end filters">
+        <button class="btn btn-light shadow-sm d-flex d-lg-none" (click)="open(content)"><span
             class="material-symbols-outlined">
             filter_alt
           </span> Filters</button>
+          <!-- <div class="pins">
+
+          </div> -->
         <div class="dropdown">
           <button class="btn btn-light shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
             aria-expanded="false">Sort by: <strong class="text-muted">{{filters.sortBy}}</strong></button>

@@ -7,7 +7,7 @@
           class="form-control no-border-on-focus" id="inputGroupFile01" name="file" #uploadInput required ngModel>
         <button (click)="uploadHandler()" class="btn btn-blue ms-2">Preview</button>
       </div>
-      <a class="d-block" href="../../assets/csv/sample.csv" #scrolling>Download Sample</a>
+      <a class="d-block text-decoration-none link" href="../../assets/csv/sample.csv" #scrolling>Download Sample</a>
     </form>
   </div>
   <div class="row" *ngIf="!errorData.length && fileData.length > 0; else noOrder">
@@ -83,7 +83,8 @@
 
   <ng-template #noOrder>
     <ng-container *ngIf="errorData.length>0; else noPreview">
-      <div class="col-12 col-lg-7">
+      <div class="col-12 col-lg-7 ms-3">
+        <h4>Errors</h4>
         <table class="table text-danger shadow-sm table-bordered">
           <thead>
             <tr>

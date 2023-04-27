@@ -116,7 +116,7 @@ export class UploadComponent {
     }
     const MAX_ROWS = 10
     if (results.data.length > MAX_ROWS) {
-      this.toastService.handleError("File too big!");
+      this.toastService.handleError("File too big");
       return;
     }
     if(fileData.length == 0) {
@@ -133,11 +133,11 @@ export class UploadComponent {
       row++;
 
       if(!item.quantity) {
-        this.errorData.push({row, message: `Quantity not provided!`})
+        this.errorData.push({row, message: `Quantity not provided`})
         continue;
       } else {
         if(!(/^\d+$/.test((item.quantity).toString()))) {
-          this.errorData.push({row, message: `Quantity is not a valid number!`})          
+          this.errorData.push({row, message: `Quantity is not a valid number`})          
         }
       }
 
@@ -155,7 +155,7 @@ export class UploadComponent {
         } 
         else items.push({ product, quantity: item.quantity });
       } 
-      else this.errorData.push({row, message: `Product with id '${item.sku_id}' does not exist!`})
+      else this.errorData.push({row, message: `Product with id '${item.sku_id}' does not exist`})
     }
     // if(this.errorData.length>0) items = [];
     this.fileData = items; //TODO append multiple files
@@ -172,7 +172,7 @@ export class UploadComponent {
       }
     }
     this.calculateSummary()
-    this.toastService.handleSuccess('Item quantity updated!')
+    this.toastService.handleSuccess('Item quantity updated')
   }
 
   decreaseQuantityHandler(id: number) {
@@ -189,7 +189,7 @@ export class UploadComponent {
       }
     }
     this.calculateSummary()
-    this.toastService.handleSuccess('Item quantity updated!')
+    this.toastService.handleSuccess('Item quantity updated')
   }
 
   refreshQuantity(id: number, event: any) {
@@ -215,7 +215,7 @@ export class UploadComponent {
       }
     }
     this.calculateSummary()
-    this.toastService.handleSuccess('Item quantity updated!')
+    this.toastService.handleSuccess('Item quantity updated')
   }
 
   removeFromFileHandler() {
@@ -234,6 +234,6 @@ export class UploadComponent {
 
   downloadAgain() {
     this.utils.downloadOrder(this.orderItems);
-    this.toastService.handleSuccess('Order has been downloaded again!!');
+    this.toastService.handleSuccess('Order has been downloaded again!');
   }
 }
