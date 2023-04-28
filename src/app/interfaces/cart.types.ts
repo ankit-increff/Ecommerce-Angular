@@ -1,9 +1,9 @@
-import { product } from "./Products.types";
+import { product } from "./products.types";
 export interface cartItem {
     product: product
     quantity: number;
 }
-
+// todo all uppercase
 export interface itemMap {
     [id: number]: number;
 } 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { modalProduct, product } from '../interfaces/Products.types';
+import { modalProduct, product } from '../interfaces/products.types';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({

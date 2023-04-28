@@ -1,12 +1,27 @@
 import { Injectable } from '@angular/core';
-import { filter } from '../interfaces/Cart.types';
+import { filter } from '../interfaces/cart.types';
+import { BehaviorSubject } from 'rxjs';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilterService {
 
-  constructor() { }
+  constructor(private toastService:ToastService) { }
+
+  isPriceFilterInvalid: Boolean = false;
+  currentFilters = new BehaviorSubject<filter>({
+    minPrice: -1,
+    maxPrice: 1e9+7,
+    brands:[] as string[],
+    rating: 0,
+    sortBy: 'Relevance'
+  });
+
+  setCurrentFilters(filter:filter) {
+    this.currentFilters.next(filter);
+  }
 
   setFilters(filters:filter) {
     sessionStorage.setItem('filters', JSON.stringify(filters));
@@ -24,6 +39,7 @@ export class FilterService {
     if(filtersJson) {
       if(this.verifyFilters(filtersJson)) appliedFilters = JSON.parse(filtersJson);
     }
+    this.setCurrentFilters(appliedFilters);
     return appliedFilters;
   }
 
@@ -34,8 +50,7 @@ export class FilterService {
         throw new Error("Unhandled exception: Session storage has been tampered!!");
       }
     } catch (error) {
-      /// handle error
-      alert("Unhandled exception: Session storage has been tampered!!");
+      this.toastService.handleError("Unhandled exception: Session storage has been tampered!!");
       return false;
     } 
     return true;

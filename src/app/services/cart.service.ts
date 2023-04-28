@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
-import { cartItem, itemMap} from '../interfaces/Cart.types'
+import { cartItem, itemMap} from '../interfaces/cart.types'
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { UsersService } from './users.service';
-import { product } from '../interfaces/Products.types';
+import { product } from '../interfaces/products.types';
 import { ProductService } from './product.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-
-  constructor(private usersService: UsersService, private productService: ProductService) { }
-
   currentCart = new BehaviorSubject<cartItem[]>([]);
   currentCart$ = this.currentCart.asObservable();  //private
   currentCartData:cartItem[] = [];
   totalQuantity = new Subject<number>();
+  
+  constructor(private usersService: UsersService, private productService: ProductService) { }
 
   setCurrentCart(cartItems: cartItem[]) {
     this.currentCart.next(cartItems);

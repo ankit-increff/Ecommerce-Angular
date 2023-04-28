@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from './components/toast/toast.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import { FilterComponent } from './components/filter/filter.component';
 
 
 @NgModule({
@@ -31,14 +32,15 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
     ProductDetailComponent,
     PageNotFoundComponent,
     ToastComponent,
-    ConfirmationModalComponent,
+    ConfirmationModalComponent, // TODO priority ordering
+    FilterComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     UtilsModule,
-    HttpClientModule,
+    HttpClientModule, //add common module
     FormsModule
   ],
   providers: [],

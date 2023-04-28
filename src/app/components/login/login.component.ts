@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { user, userInfo } from '../../interfaces/User.types';
+import { user, userInfo } from '../../interfaces/user.types';
 import { UsersService } from '../../services/users.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';

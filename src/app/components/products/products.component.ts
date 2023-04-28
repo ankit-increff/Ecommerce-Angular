@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProductService } from '../../services/product.service';
-import { product, quantityArray } from '../../interfaces/Products.types';
+import { product, quantityArray } from '../../interfaces/products.types';
 import { CartService } from '../../services/cart.service';
 import { FilterService } from 'src/app/services/filter.service';
-import { filter } from 'src/app/interfaces/Cart.types';
+import { filter } from 'src/app/interfaces/cart.types';
 import { ToastService } from 'src/app/services/toast.service';
 import { UtilService } from 'src/app/services/util.service';
 import { ModalService } from 'src/app/services/modal.service';
@@ -17,38 +17,33 @@ import { ModalService } from 'src/app/services/modal.service';
 })
 export class ProductsComponent {
   closeResult = '';
-  constructor(private offcanvasService: NgbOffcanvas, private productService: ProductService, private cartService: CartService, private filterService: FilterService, private toastService: ToastService, private util: UtilService, private modalService: ModalService) { }
-  
   products: product[] = [];
   quantities: quantityArray = {}
-  intMax = 1e9+7;
+  intMax = 1e9 + 7;
   intMin = -1;
-  priceFilterErrorMessage = '';
+
+  constructor(private offcanvasService: NgbOffcanvas, private productService: ProductService, private cartService: CartService, private filterService: FilterService, private toastService: ToastService, private util: UtilService, private modalService: ModalService) { }
 
   //handle price filters and session storage change
-  filters:filter = {
+  filters: filter = {
     minPrice: -1,
-    maxPrice: 1e9+7,
-    brands:[] as string[],
+    maxPrice: 1e9 + 7,
+    brands: [] as string[],
     rating: 0,
     sortBy: 'Relevance'
   }
-  
-  allBrands:string[] = [];
-  confirmModal!:any;
+
+  allBrands: string[] = [];
   ngOnInit() {
-    console.log('prodInitStarted');
     this.productService.products.subscribe(data => {
-      console.log('subscribed');
       this.products = data.products;
       this.allBrands = this.products.map(product => product.brand)
       this.allBrands = [...new Set(this.allBrands)];
-      console.log("prod - syncedProducts");
       this.applyFilters();
     })
 
     // this.cartService.currentCartData.forEach(item => {
-    //   this.quantities[item.product.id] = item.quantity;
+    //   this.quantities[item.product.id] = item.quantity;  //todo
     // });  //page navigation safe
 
     this.cartService.currentCart$.subscribe(data => {
@@ -57,10 +52,11 @@ export class ProductsComponent {
         this.quantities[item.product.id] = item.quantity;
       })
     })
-
-    let filters = this.filterService.getAllFilters();
-    if(filters) this.filters = filters;
-    this.applyFilters();
+    //todo unsubscribe
+    this.filterService.currentFilters.subscribe(data => {
+      this.filters = data;
+      this.applyFilters();
+    })
   }
 
   triggerToast(message: string) {
@@ -80,41 +76,40 @@ export class ProductsComponent {
     this.cartService.addToCart(product.id, 1);
     this.toastService.handleSuccess('Item added to the cart')
   }
-  
+
   increaseCartHandler(id: number) {
     this.cartService.addToCart(id, 1);
-    this.toastService.handleSuccess('Item quantity updated') 
+    this.toastService.handleSuccess('Item quantity updated')
   }
-  
+
   decreaseCartHandler(id: number) {
-    if(this.quantities[id]==1) {
-      let currentProduct = this.products.find(product => product.id == id);
-      if(currentProduct) this.modalService.setRemovingProduct(currentProduct);
+    if (this.quantities?.[id] == 1) {
+      let currentProduct = this.products.find(product => product?.id == id); // safe check todo
+      if (currentProduct) this.modalService.setRemovingProduct(currentProduct);
       return;
     }
     this.cartService.addToCart(id, -1);
     this.toastService.handleSuccess('Item quantity updated')
-    
   }
 
   refreshQuantity(id: number, event: any) {
     event.target.value = this.quantities[id];
   }
 
-  updateCartHandler(id:number, $event: any) {
+  updateCartHandler(id: number, $event: any) {
     let value = $event.target.value;
-    if(!this.util.verifyQuantity(value)) return;
+    if (!this.util.verifyQuantity(value)) return;
 
-    if(value == '0') {
+    if (value == '0') {
       let currentProduct = this.products.find(product => product.id == id);
-      if(currentProduct) this.modalService.setRemovingProduct(currentProduct);
+      if (currentProduct) this.modalService.setRemovingProduct(currentProduct);
       return;
     }
     this.cartService.updateCart(id, parseInt(value))
     this.toastService.handleSuccess('Cart items updated successfully')
   }
 
-  removeFromCartHandler(id:number) {
+  removeFromCartHandler(id: number) {
     console.log(id);
     this.cartService.removeFromCart(id);
   }
@@ -124,83 +119,32 @@ export class ProductsComponent {
     this.applyFilters();
   }
 
-  applySorting(sort:string) {
+  applySorting(sort: string) {
     this.products = [...this.productService.productsData];
     switch (sort) {
       case 'Relevance':
         this.products = this.productService.productsData
         break;
       case 'Price low to high':
-        this.products = this.products.sort((a:product, b:product) => a.price - b.price);
+        this.products = this.products.sort((a: product, b: product) => a.price - b.price);
         break;
-        case 'Price high to low':
-          this.products = this.products.sort((a:product, b:product) => b.price - a.price);
-          break;
-        case 'Ratings':
-          this.products = this.products.sort((a:product, b:product) => b.rating - a.rating);
-          break;
+      case 'Price high to low':
+        this.products = this.products.sort((a: product, b: product) => b.price - a.price);
+        break;
+      case 'Ratings':
+        this.products = this.products.sort((a: product, b: product) => b.rating - a.rating);
+        break;
     }
   }
 
   applyFilters() {
-    if(this.priceFilterError()) return;
+    if (this.filterService.isPriceFilterInvalid) return;
     this.applySorting(this.filters.sortBy);
-    if(this.filters.minPrice) this.products = this.products.filter(product => product.price >= (this.filters.minPrice || 0));
-    if(this.filters.maxPrice) this.products = this.products.filter(product => product.price <= (this.filters.maxPrice|| 999999));
-    if(this.filters.rating) this.products = this.products.filter(product => product.rating >= (this.filters.rating || 0))
-    if(this.filters.brands.length) this.products = this.products.filter(product =>this.filters.brands.includes(product.brand));
-    
+    if (this.filters.minPrice) this.products = this.products.filter(product => product.price >= (this.filters.minPrice || 0));
+    if (this.filters.maxPrice) this.products = this.products.filter(product => product.price <= (this.filters.maxPrice || 999999));
+    if (this.filters.rating) this.products = this.products.filter(product => product.rating >= (this.filters.rating || 0))
+    if (this.filters.brands.length) this.products = this.products.filter(product => this.filters.brands.includes(product.brand));
+
     this.filterService.setFilters(this.filters);
-  }
-
-  changeMinPrice(event:any) {
-    this.filters.minPrice = event.target.value;
-    this.applyFilters();
-  }
-  
-  changeMaxPrice(event:any) {
-    this.filters.maxPrice = event.target.value
-    this.applyFilters();
-  }
-
-  ratingChangeHandler(event:any) {
-    this.filters.rating = parseInt(event.target.value)
-    this.applyFilters();
-  } 
-
-  brandChangeHandler(event:any) {
-    let target = event.target
-    if(target.checked) {
-      this.filters.brands.push(target.value);
-    } else {
-      this.filters.brands = [...this.filters.brands].filter(brand => brand != target.value);
-    }
-    this.applyFilters();
-  }
-
-  clearFilters() {
-    this.filterService.clearFilters();
-    this.filters = this.filterService.getAllFilters();
-    this.applyFilters();
-  }
-
-  priceFilterError() {
-    let mx = this.filters.maxPrice,
-    mn = this.filters.minPrice;
-    // if(!mx && !mn) return false;
-    // if(mx==this.intMax && mn==this.intMin) return false;
-
-    if(mx && mx!=this.intMax && !(/^\d+$/.test(mx.toString()))) {
-      this.priceFilterErrorMessage = "Max Price must be a positive integer"
-      return true;
-    } else if(mn && mn!=this.intMin && !(/^\d+$/.test(mn.toString()))) {
-      this.priceFilterErrorMessage = "Min Price must be a positive integer"
-      return true;
-    } else if(mx && mn && mx-mn<0) {
-      this.priceFilterErrorMessage = "Min Price should not be greater than max price"
-      return true;
-    }
-    return false;
-    
   }
 }

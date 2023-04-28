@@ -9,7 +9,7 @@ import { ProductCardComponent } from './product-card/product-card.component';
     ProductCardComponent
   ],
   imports: [
-    CommonModule
+    CommonModule //ON TOP OF APP MODULE
   ],
   exports: [
     ProductCardComponent

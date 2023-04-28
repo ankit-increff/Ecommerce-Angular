@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ProductService } from './services/product.service';
 import { UsersService } from './services/users.service';
 import { CartService } from './services/cart.service';
-import { cartItem, itemMap } from './interfaces/Cart.types';
+import { cartItem, itemMap } from './interfaces/cart.types';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import { cartItem, itemMap } from './interfaces/Cart.types';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'ecommerce';
+  title = 'ecommerce'; // todo: change
 
   constructor(private productService: ProductService, private usersService: UsersService, private cartService: CartService) { }
   ngOnInit() {
@@ -32,7 +32,7 @@ export class AppComponent {
 
   synchronizeUser() { //try-catch
     const currentUserJson = localStorage.getItem('loggedInUser');
-    let currUser = { email: '0', name: "Guest" };
+    let currUser = { email: '0', name: "Guest" }; //todo
     if (currentUserJson) currUser = JSON.parse(currentUserJson);
     this.usersService.setCurrentUser(currUser);
     return currUser.email;
@@ -47,7 +47,7 @@ export class AppComponent {
       cartData[email] = cartData[0];
     }
 
-    let userCart = cartData[email],
+    let userCart = cartData[email], //checks
     localCart = cartData[0];
 
     if(email!='0') {
@@ -76,7 +76,7 @@ export class AppComponent {
     return userCart;
   }
 
-  getMrp(price: number, discount: number) {
+  getMrp(price: number, discount: number) { //remove
     return ((price * 100) / (100 - discount)).toFixed(2);
   }
 }

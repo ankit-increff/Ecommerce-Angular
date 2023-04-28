@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 interface toastContent {
   type: string,
   message: string
-}
+} // todo: 
 
 @Injectable({
   providedIn: 'root'
