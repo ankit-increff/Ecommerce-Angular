@@ -1,4 +1,4 @@
-export interface product {
+export interface PRODUCT {
     id: number;
     title: string;
     description: string;
@@ -11,15 +11,15 @@ export interface product {
     images: Array<string>;
 }
 
-export interface productJson {
-    products: product[];
+export interface PRODUCTJSON {
+    products: PRODUCT[];
 }
 
-export interface quantityArray {
+export interface QUANTITYARRAY {
     [id: number]: number;
 }
 
-export interface modalProduct {
+export interface MODALPRODUCT {
     id: number;
     title: string;
 }

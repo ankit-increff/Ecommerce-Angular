@@ -6,18 +6,18 @@
                 <input #email="ngModel" type="email" class="form-control" id="floatingInput"
                     placeholder="name@example.com" name="email" email required ngModel>
                 <label for="floatingInput">Email address</label>
-                <span *ngIf="email.errors?.['required'] && email.dirty" class="error-message">Email is a required
+                <span *ngIf="email?.errors?.['required'] && email?.dirty" class="error-message">Email is a required
                     field</span>
-                <span *ngIf="email.errors?.['email'] && email.dirty" class="error-message">Email is invalid!</span>
-                <span *ngIf="email.valid && email.dirty" class="success-message">All looks good!</span>
+                <span *ngIf="email?.errors?.['email'] && email?.dirty" class="error-message">Email is invalid!</span>
+                <span *ngIf="email?.valid && email?.dirty" class="success-message">All looks good!</span>
             </div>
             <div class="form-floating">
                 <input #password="ngModel" type="password" class="form-control" id="floatingPassword"
                     placeholder="Password" name="password" minlength="4" required ngModel>
                 <label for="floatingPassword">Password</label>
-                <span *ngIf="password.errors && password.dirty" class="error-message">Password is a required
+                <span *ngIf="password?.errors && password?.dirty" class="error-message">Password is a required
                     field</span>
-                <span *ngIf="password.valid && password.dirty" class="success-message">All looks good!</span>
+                <span *ngIf="password?.valid && password?.dirty" class="success-message">All looks good!</span>
             </div>
             <div class="form-floating">
                 <button type="submit" class="btn btn-primary mt-3">Login</button>

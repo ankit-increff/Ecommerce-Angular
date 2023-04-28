@@ -1,9 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { modalProduct } from 'src/app/interfaces/products.types';
+import { MODALPRODUCT } from 'src/app/interfaces/products.types';
 import { CartService } from 'src/app/services/cart.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { ToastService } from 'src/app/services/toast.service';
-declare var bootstrap: any;
 
 @Component({
   selector: 'app-confirmation-modal',
@@ -11,21 +10,15 @@ declare var bootstrap: any;
   styleUrls: ['./confirmation-modal.component.scss']
 })
 export class ConfirmationModalComponent {
+  product!: MODALPRODUCT;
+  @ViewChild('modalToggleBtn') modalToggleBtnRef!: ElementRef;
+
   constructor(private cartService: CartService, private modalService: ModalService, private toastService: ToastService) {} 
-
-  product!: modalProduct;
-
-  confirmModal!:any;
-
-  @ViewChild('confirmRemoveModal') confirmModalRef!: ElementRef;
-  ngAfterViewInit() {
-    this.confirmModal = new bootstrap.Modal(this.confirmModalRef.nativeElement);
-  }
 
   ngOnInit() {
     this.modalService.removingProduct.subscribe(data => {
       this.product = data;
-      this.confirmModal.show();
+      this.modalToggleBtnRef.nativeElement.click();
     })
   }
   

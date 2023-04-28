@@ -1,14 +1,14 @@
-export interface user {
+export interface USER {
     email: string;
     name: string;
     password: string;
 }
 
-export interface userInfo {
+export interface USERINFO {
     email: string;
     name: string;
 }
 
-export interface usersJson {
-    credentials: user[];
+export interface USERSJSON {
+    credentials: USER[];
 }

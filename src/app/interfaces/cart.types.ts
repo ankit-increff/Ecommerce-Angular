@@ -1,14 +1,13 @@
-import { product } from "./products.types";
-export interface cartItem {
-    product: product
+import { PRODUCT } from "./products.types";
+export interface CARTITEM {
+    product: PRODUCT
     quantity: number;
 }
-// todo all uppercase
-export interface itemMap {
+export interface ITEMMAP {
     [id: number]: number;
 } 
 
-export interface summary {
+export interface SUMMARY {
     totalMrp: number,
     discount: number,
     deliveryCharges: number,
@@ -16,7 +15,7 @@ export interface summary {
     savings: number
   }
 
-export interface filter {
+export interface FILTER {
     minPrice: number,
     maxPrice: number,
     brands:string[],

@@ -13,19 +13,19 @@
             </div>
             <div class="row shadow-sm mb-2" *ngFor="let item of cartItems">
                 <div class="col-12 col-sm-4 text-center"><img class="img-aspect p-1 rounded-2 c-pointer"
-                        src="{{item.product.thumbnail}}" alt="" height="220px"
-                        routerLink="../product/{{item.product.id}}"></div>
+                        src="{{item?.product?.thumbnail}}" alt="" height="220px"
+                        routerLink="../product/{{item?.product?.id}}"></div>
                 <div class="col-12 col-sm-8 py-3 position-relative">
-                    <h6 class="text-muted mb-0 c-pointer" routerLink="../product/{{item.product.id}}">
-                        {{item.product.brand}}</h6>
-                    <h5 class="mb-0 c-pointer" routerLink="../product/{{item.product.id}}">{{item.product.title}}</h5>
-                    <p class="mb-2 opacity-75 one-liner">{{item.product.description}}
+                    <h6 class="text-muted mb-0 c-pointer" routerLink="../product/{{item?.product?.id}}">
+                        {{item?.product?.brand}}</h6>
+                    <h5 class="mb-0 c-pointer" routerLink="../product/{{item?.product?.id}}">{{item?.product?.title}}</h5>
+                    <p class="mb-2 opacity-75 one-liner">{{item?.product?.description}}
                     </p>
-                    <h5 class="d-inline-block me-2 fw-normal">{{item.product.price | currency: 'INR'}}</h5>
+                    <h5 class="d-inline-block me-2 fw-normal">{{item?.product?.price | currency: 'INR'}}</h5>
                     <small>
-                        <span class="text-muted text-decoration-line-through">{{getMrp(item.product.price,
+                        <span class="text-muted text-decoration-line-through">{{util.getMrp(item.product.price,
                             item.product.discount)| currency:'INR'}}</span>
-                        <span class="text-success ms-1">({{item.product.discount}}% Off)</span>
+                        <span class="text-success ms-1">({{item?.product?.discount}}% Off)</span>
                     </small>
                     <div class="input-group mb-3">
                         <button class="btn btn-outline-red border-end-0 px-2"
@@ -36,7 +36,7 @@
                         </button>
                         <input type="text"
                             class="w-3rem flex-grow-0 text-center text-red border-start-0 border-red border border-end-0 quantity-input"
-                            (keyup)="updateCartHandler(item.product.id, $event)" (blur)="refreshQuantity(item.product.id, $event)" value="{{item.quantity}}"
+                            (keyup)="updateCartHandler(item.product.id, $event)" (blur)="refreshQuantity(item.product.id, $event)" value="{{item?.quantity}}"
                             placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                         <button class="btn btn-outline-red border-start-0 px-2"
                             (click)="increaseCartHandler(item.product.id)">
@@ -107,6 +107,7 @@
     </ng-template>
 </div>
 
+<!-- clear cart modal -->
 <div class="modal fade" id="confirmRemoveAllModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

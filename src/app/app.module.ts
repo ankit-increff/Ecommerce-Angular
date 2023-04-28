@@ -11,36 +11,36 @@ import { CartComponent } from './components/cart/cart.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { UtilsModule } from './utils/utils.module';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from './components/toast/toast.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { FilterComponent } from './components/filter/filter.component';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
+    ToastComponent,
+    ConfirmationModalComponent,
     NavbarComponent,
     FooterComponent,
-    LoginComponent,
+    AppComponent,
     ProductsComponent,
+    FilterComponent,
+    LoginComponent,
     CartComponent,
     UploadComponent,
     ProductDetailComponent,
     PageNotFoundComponent,
-    ToastComponent,
-    ConfirmationModalComponent, // TODO priority ordering
-    FilterComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    UtilsModule,
-    HttpClientModule, //add common module
+    HttpClientModule,
     FormsModule
   ],
   providers: [],

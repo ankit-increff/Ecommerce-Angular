@@ -1,51 +1,37 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Papa } from 'ngx-papaparse';
-import { cartItem, summary } from 'src/app/interfaces/cart.types';
-import { product } from 'src/app/interfaces/products.types';
+import { CARTITEM, SUMMARY } from 'src/app/interfaces/cart.types';
+import { PRODUCT } from 'src/app/interfaces/products.types';
+import { FIELDS } from 'src/app/interfaces/upload.types';
 import { ProductService } from 'src/app/services/product.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UtilService } from 'src/app/services/util.service';
-declare var bootstrap: any;
 
-interface fields {
-  sku_id: string;
-  quantity: number;
-}
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss']
 })
 export class UploadComponent {
-  constructor(private papa: Papa, private productService: ProductService, private utils: UtilService, private toastService: ToastService) { }
-  
-  fileData: cartItem[] = [];
+  fileData: CARTITEM[] = [];
   orderItems: any = [];
-  summary!: summary;
+  summary!: SUMMARY;
   file!: File;
-  removingProduct!: product;
+  removingProduct!: PRODUCT;
   errorData:any = []
-
+  
   @ViewChild('uploadInput') input!: ElementRef;
   @ViewChild('scrolling') scroller!: ElementRef;
-  @ViewChild('modal') modalRef!: ElementRef;
-
-  confirmModal!: any;
-
-  ngAfterViewInit() {
-    this.confirmModal = new bootstrap.Modal(this.modalRef.nativeElement);
-  }
+  @ViewChild('modalToggleBtn') modalToggleBtnRef!: ElementRef;
+  
+  constructor(private papa: Papa, private productService: ProductService, private utils: UtilService, private toastService: ToastService) { }
   uploadHandler() {
     this.readFileData();
     this.input.nativeElement.value = '';
   }
 
-  submitHandler(input: File) {
-    console.log(input);
-  }
-
   changeHandler(event: any) {
-    this.file = event.target.files[0];
+    this.file = event?.target?.files?.[0];
     this.errorData = [];
     this.orderItems = [];
     this.fileData = [];
@@ -56,35 +42,35 @@ export class UploadComponent {
   }
 
   calculateSummary() {
-    let tempSummary: summary = {
+    let tempSummary: SUMMARY = {
       totalMrp: 0,
       discount: 0,
       deliveryCharges: 0,
       amount: 0,
       savings: 0
     };
-    this.fileData.forEach(item => {
-      let product = item.product;
-      tempSummary.amount += product.price * item.quantity;
-      tempSummary.totalMrp += this.utils.getMrp(product.price, product.discount) * item.quantity;
+    this.fileData?.forEach(item => {
+      let product = item?.product;
+      tempSummary.amount += product?.price * item?.quantity;
+      tempSummary.totalMrp += this.utils.getMrp(product?.price, product?.discount) * item?.quantity;
     });
 
-    tempSummary.discount = tempSummary.totalMrp - tempSummary.amount;
+    tempSummary.discount = tempSummary?.totalMrp - tempSummary?.amount;
     if (tempSummary.amount < 1000) {
       tempSummary.deliveryCharges = 49;
       tempSummary.amount += 49;
     }
-    tempSummary.savings = tempSummary.totalMrp - tempSummary.amount;
+    tempSummary.savings = tempSummary?.totalMrp - tempSummary?.amount;
     this.summary = tempSummary;
   }
 
   placeOrderHandler() {
-    this.fileData.forEach(item => {
-      this.orderItems.push({
-        sku_id: item.product.id,
-        title: item.product.title,
-        price: item.product.price,
-        quantity: item.quantity
+    this.fileData?.forEach(item => {
+      this.orderItems?.push({
+        sku_id: item?.product?.id,
+        title: item?.product?.title,
+        price: item?.product?.price,
+        quantity: item?.quantity
       })
     });
     this.utils.downloadOrder(this.orderItems);
@@ -104,70 +90,67 @@ export class UploadComponent {
   }
 
   readFileDataCallback(results: any) {
-    let fileData = results.data;
-    let meta = results.meta;
-    if (meta.fields.length != 2) {
+    let fileData = results?.data;
+    let meta = results?.meta;
+    if (meta?.fields?.length != 2) {
       this.toastService.handleError('No of headers do not match');
       return;
     }
-    if (meta.fields[0] != "sku_id" || meta.fields[1] != "quantity") {
+    if (meta?.fields?.[0] != "sku_id" || meta?.fields?.[1] != "quantity") {
       this.toastService.handleError('Invalid header names');
       return;
     }
     const MAX_ROWS = 10
-    if (results.data.length > MAX_ROWS) {
+    if (results?.data?.length > MAX_ROWS) {
       this.toastService.handleError("File too big");
       return;
     }
-    if(fileData.length == 0) {
-      this.toastService.handleError("File is empty");
+    if(fileData?.length == 0) {
+      this.toastService?.handleError("File is empty");
       return;
     }
     this.updateFileData(fileData);
   }
-  updateFileData(data: Array<fields>) {
-    let products = this.productService.productsData;
-    let items: cartItem[] = [];
+  updateFileData(data: Array<FIELDS>) {
+    let products = this.productService?.productsData;
+    let items: CARTITEM[] = [];
     let row = 1;
     for (let item of data) { 
       row++;
 
       if(!item.quantity) {
-        this.errorData.push({row, message: `Quantity not provided`})
+        this.errorData?.push({row, message: `Quantity not provided`})
         continue;
       } else {
-        if(!(/^\d+$/.test((item.quantity).toString()))) {
-          this.errorData.push({row, message: `Quantity is not a valid number`})          
+        if(!(/^\d+$/.test((item?.quantity)?.toString()))) {
+          this.errorData?.push({row, message: `Quantity is not a valid number`})          
         }
       }
 
-      let product = products.find(p => p.id == parseInt(item.sku_id));
+      let product = products?.find(p => p?.id == parseInt(item?.sku_id));
       if (product){
-        let duplicate = items.some(p => p.product.id == parseInt(item.sku_id));
+        let duplicate = items?.some(p => p?.product?.id == parseInt(item?.sku_id));
         if(duplicate) {
           for(let i of items) {
-            if(i.product.id == parseInt(item.sku_id)) {
-              console.log(typeof(i.quantity),typeof(item.quantity)) ;
-              console.log(item.quantity);
-              i.quantity = parseInt((item.quantity).toString()) + parseInt((i.quantity).toString()); ///errror TODO
+            if(i?.product?.id == parseInt(item?.sku_id)) {
+              i.quantity = parseInt((item?.quantity)?.toString()) + parseInt((i?.quantity)?.toString());
             }
           }
         } 
-        else items.push({ product, quantity: item.quantity });
+        else items?.push({ product, quantity: item?.quantity });
       } 
-      else this.errorData.push({row, message: `Product with id '${item.sku_id}' does not exist`})
+      else this.errorData?.push({row, message: `Product with id '${item?.sku_id}' does not exist`})
     }
-    // if(this.errorData.length>0) items = [];
-    this.fileData = items; //TODO append multiple files
+    this.fileData = items;
     this.calculateSummary();
     setTimeout(() => {
-      this.scroller.nativeElement.scrollIntoView();
+      this.scroller?.nativeElement?.scrollIntoView();
     }, 1);
   }
 
   increaseQuantityHandler(id: number) {
     for (let i of this.fileData) {
-      if (i.product.id == id) {
+      if (i?.product?.id == id) {
         i.quantity++;
       }
     }
@@ -176,15 +159,15 @@ export class UploadComponent {
   }
 
   decreaseQuantityHandler(id: number) {
-    let tempItem = this.fileData.find(item => item.product.id == id);
-    if (tempItem && tempItem.quantity == 1) {
-      this.removingProduct = tempItem.product;
-      this.confirmModal.show();
+    let tempItem = this.fileData?.find(item => item?.product?.id == id);
+    if (tempItem && tempItem?.quantity == 1) {
+      this.removingProduct = tempItem?.product;
+      this.modalToggleBtnRef.nativeElement.click();
       return;
     }
 
     for (let i of this.fileData) {
-      if (i.product.id == id) {
+      if (i?.product?.id == id) {
         i.quantity--;
       }
     }
@@ -193,25 +176,25 @@ export class UploadComponent {
   }
 
   refreshQuantity(id: number, event: any) {
-    let tempItem = this.fileData.find(item => item.product.id == id);
-    if (tempItem) event.target.value = tempItem.quantity;
+    let tempItem = this.fileData?.find(item => item?.product?.id == id);
+    if (tempItem) event.target.value = tempItem?.quantity;
   }
 
   updateQuantityHandler(id: number, event: any) {
-    let value = event.target.value;
+    let value = event?.target?.value;
     if (!this.utils.verifyQuantity(value)) return;
     if (value == '0') {
-      let tempItem = this.fileData.find(item => item.product.id == id);
+      let tempItem = this.fileData?.find(item => item?.product?.id == id);
       if (tempItem) {
-        this.removingProduct = tempItem.product;
-        this.confirmModal.show();
+        this.removingProduct = tempItem?.product;
+        this.modalToggleBtnRef.nativeElement.click();
         return;
       }
     }
 
     for (let i of this.fileData) {
-      if (i.product.id == id) {
-        i.quantity = event.target.value;
+      if (i?.product?.id == id) {
+        i.quantity = event?.target?.value;
       }
     }
     this.calculateSummary()
@@ -219,17 +202,17 @@ export class UploadComponent {
   }
 
   removeFromFileHandler() {
-    this.fileData = [...this.fileData].filter(item => item.product.id != this.removingProduct.id);
+    this.fileData = [...this.fileData]?.filter(item => item?.product?.id != this.removingProduct?.id);
     this.calculateSummary();
     this.toastService.handleSuccess('Item removed');
   }
 
   removeClickHandler(id: number) {
-    let tempItem = this.fileData.find(item => item.product.id == id);
+    let tempItem = this.fileData?.find(item => item?.product?.id == id);
     if (tempItem) {
-      this.removingProduct = tempItem.product;
+      this.removingProduct = tempItem?.product;
     }
-    this.confirmModal.show();
+    this.modalToggleBtnRef.nativeElement.click();
   }
 
   downloadAgain() {

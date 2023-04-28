@@ -33,19 +33,19 @@
         *ngIf="products.length > 0; else noResult">
         <div class="col" *ngFor="let product of products">
           <div class="card border-0 shadow-sm position-relative product-card c-pointer"
-            routerLink="product/{{product.id}}">
-            <div class="img-aspect"><img class="img-fluid img-aspect rounded p-1 border-0" src="{{product.thumbnail}}"
+            routerLink="product/{{product?.id}}">
+            <div class="img-aspect"><img class="img-fluid img-aspect rounded p-1 border-0" src="{{product?.thumbnail}}"
                 alt="Image not Available"></div>
             <div class="rating position-absolute bg-light bg-opacity-75 top-0 end-0 shadow-sm rounded-2 px-2 py-1 m-2">
-              {{product.rating | number : '1.1-1'}} ⭐</div>
+              {{product?.rating | number : '1.1-1'}} ⭐</div>
             <div class="card-body">
-              <h6 class="card-title mb-1 text-capitalize">{{product.title}}</h6>
-              <p class="mb-1 text-muted opacity-75 one-liner text-capitalize">{{product.description}}</p>
-              <h6 class="d-inline-block me-2">₹{{product.price | number : '1.2-2'}}</h6> <small><span
-                  class="text-muted text-decoration-line-through">₹{{getMrp(product.price, product.discount) | number :
-                  '1.2-2'}}</span> <span class="text-success ms-1">({{product.discount}}%
+              <h6 class="card-title mb-1 text-capitalize">{{product?.title}}</h6>
+              <p class="mb-1 text-muted opacity-75 one-liner text-capitalize">{{product?.description}}</p>
+              <h6 class="d-inline-block me-2">₹{{product?.price | number : '1.2-2'}}</h6> <small><span
+                  class="text-muted text-decoration-line-through">₹{{util.getMrp(product.price, product.discount) | number :
+                  '1.2-2'}}</span> <span class="text-success ms-1">({{product?.discount}}%
                   Off)</span></small>
-              <div class="input-group w-fit" *ngIf="quantities.hasOwnProperty(product.id); else addToCartBtn"
+              <div class="input-group w-fit" *ngIf="quantities?.hasOwnProperty(product.id); else addToCartBtn"
                 (click)="$event.stopPropagation()">
                 <button class="btn btn-sm btn-outline-red border-end-0 px-2" (click)="decreaseCartHandler(product.id)">
                   <span class="material-symbols-outlined">

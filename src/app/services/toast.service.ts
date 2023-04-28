@@ -1,22 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { TOASTCONTENT } from '../interfaces/toast.types';
 
-interface toastContent {
-  type: string,
-  message: string
-} // todo: 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToastService {
+  showToast = new Subject<TOASTCONTENT>();
 
   constructor() { }
-
-  showToast = new Subject<toastContent>();
   
   handleSuccess(message: string) {
-    let content:toastContent = {
+    let content:TOASTCONTENT = {
       type: 'success',
       message: message
     };
@@ -24,7 +20,7 @@ export class ToastService {
   }
   
   handleError(message: string) {
-    let content:toastContent = {
+    let content:TOASTCONTENT = {
       type: 'error',
       message: message
     };

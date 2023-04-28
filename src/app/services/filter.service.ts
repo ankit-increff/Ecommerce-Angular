@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { filter } from '../interfaces/cart.types';
+import { FILTER } from '../interfaces/cart.types';
 import { BehaviorSubject } from 'rxjs';
 import { ToastService } from './toast.service';
 
@@ -7,27 +7,26 @@ import { ToastService } from './toast.service';
   providedIn: 'root'
 })
 export class FilterService {
-
-  constructor(private toastService:ToastService) { }
-
   isPriceFilterInvalid: Boolean = false;
-  currentFilters = new BehaviorSubject<filter>({
+  currentFilters = new BehaviorSubject<FILTER>({
     minPrice: -1,
     maxPrice: 1e9+7,
     brands:[] as string[],
     rating: 0,
     sortBy: 'Relevance'
   });
+  
+  constructor(private toastService:ToastService) { }
 
-  setCurrentFilters(filter:filter) {
+  setCurrentFilters(filter:FILTER) {
     this.currentFilters.next(filter);
   }
 
-  setFilters(filters:filter) {
+  setFilters(filters:FILTER) {
     sessionStorage.setItem('filters', JSON.stringify(filters));
   }
 
-  getAllFilters():filter {
+  getAllFilters():FILTER {
     const filtersJson = sessionStorage.getItem('filters');
     let appliedFilters = {
       minPrice: -1,
@@ -46,7 +45,7 @@ export class FilterService {
   verifyFilters(json:any) {
     try {
       let filters = JSON.parse(json);
-      if(!filters.hasOwnProperty('minPrice') || !filters.hasOwnProperty('maxPrice') || !filters.hasOwnProperty('brands') || !filters.hasOwnProperty('rating') || !filters.hasOwnProperty('sortBy') || Object.keys(filters).length>5) {
+      if(!filters.hasOwnProperty('minPrice') || !filters.hasOwnProperty('maxPrice') || !filters.hasOwnProperty('brands') || !filters.hasOwnProperty('rating') || !filters.hasOwnProperty('sortBy') || Object.keys(filters)?.length>5) {
         throw new Error("Unhandled exception: Session storage has been tampered!!");
       }
     } catch (error) {

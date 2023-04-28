@@ -6,7 +6,6 @@ import { Papa } from 'ngx-papaparse';
   providedIn: 'root'
 })
 export class UtilService {
-
   constructor(private toastService: ToastService, private papa: Papa) { }
 
   verifyQuantity(value: string) {

@@ -2,7 +2,7 @@
   <div class="col-12 col-md-6 col-lg-6">
     <div class="row">
       <div class="col-2">
-        <div class="img-aspect mb-2 c-pointer" *ngFor="let image of product.images; index as i"
+        <div class="img-aspect mb-2 c-pointer" *ngFor="let image of product?.images; index as i"
           data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="i"><img class="img-fluid img-aspect"
             src="{{image}}" alt=""></div>
       </div>
@@ -39,7 +39,7 @@
     <h4 class="mb-1">{{product.title}}</h4>
     <p class="opacity-75 mb-2 one-liner">{{product.description}}</p>
     <h4 class="d-inline-block me-2 mb-0">{{product.price | currency: 'INR'}}</h4> <span><span
-        class="text-muted text-decoration-line-through">{{getMrp(product.price, product.discount) |
+        class="text-muted text-decoration-line-through">{{util.getMrp(product.price, product.discount) |
         currency:'INR'}}</span> <span class="text-success ms-1">({{product.discount}}%
         Off)</span></span>
     <p class="text-success mb-3">inclusive of all taxes</p>

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { user, userInfo } from '../../interfaces/user.types';
+import { USER, USERINFO } from '../../interfaces/user.types';
 import { UsersService } from '../../services/users.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -12,32 +11,36 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 
 export class LoginComponent {
+  users !: USER[];
+  
   constructor(private userService: UsersService, private route: Router, private toastService:ToastService) { }
-
-  users !: user[];
 
   ngOnInit() {
     this.userService.getUsers().subscribe(data => {
-      this.users = data.credentials;
+      this.users = data?.credentials;
     });
 
     this.userService.getCurrentUser$.subscribe(data => {
-      console.warn(data);
-      if(data.email!='0') this.route.navigate(['/']);   //handle
+      if(data?.email!='guest') 
+      {
+        this.route.navigate(['/']); 
+        this.toastService.handleSuccess('Already logged in!')
+      }
     }) 
   }
 
-  loginHandler(data: user) {
-    const userWithEmail = this.users.find(user => user.email == data.email);
+  loginHandler(data: USER) {
+    const userWithEmail = this.users?.find(user => user?.email == data?.email);
     if(userWithEmail) {
-      if(userWithEmail.password == data.password) {
-        let userDetail:userInfo = {
-          email: userWithEmail.email,
-          name: userWithEmail.name
+      if(userWithEmail?.password == data?.password) {
+        let userDetail:USERINFO = {
+          email: userWithEmail?.email,
+          name: userWithEmail?.name
         }
         localStorage.setItem('loggedInUser', JSON.stringify(userDetail));
         this.userService.setCurrentUser(userDetail);
         this.route.navigate(['/']);
+        this.toastService.handleSuccess('Logged in successfully')
       } else {
         this.toastService.handleError('invalid password')
       }
@@ -45,6 +48,4 @@ export class LoginComponent {
       this.toastService.handleError("invalid email");
     }    
   }
-
- 
 }

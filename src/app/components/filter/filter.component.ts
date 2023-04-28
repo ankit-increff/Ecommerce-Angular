@@ -1,13 +1,22 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { filter } from 'src/app/interfaces/cart.types';
+import { Component, Input } from '@angular/core';
+import { FILTER } from 'src/app/interfaces/cart.types';
 import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.css']
+  styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent {
+  priceFilterErrorMessage = '';
+  filters: FILTER = {
+    minPrice: -1,
+    maxPrice: 1e9 + 7,
+    brands: [] as string[],
+    rating: 0,
+    sortBy: 'Relevance'
+  }
+
   @Input() allBrands!: string[]
   @Input() intMin!:number;
   @Input() intMax!:number;
@@ -19,35 +28,26 @@ export class FilterComponent {
     this.filters = filters;
   }
 
-  priceFilterErrorMessage = '';
-  filters: filter = {
-    minPrice: -1,
-    maxPrice: 1e9 + 7,
-    brands: [] as string[],
-    rating: 0,
-    sortBy: 'Relevance'
-  }
-
   changeMinPriceHandler(event: any) {
     this.filters.minPrice = event?.target?.value;
-    this.filterService.setCurrentFilters(this.filters);
     this.priceFilterErrorCheck();
+    this.filterService.setCurrentFilters(this.filters);
   }
   
   changeMaxPriceHandler(event: any) {
     this.filters.maxPrice = event?.target?.value;
-    this.filterService.setCurrentFilters(this.filters);
     this.priceFilterErrorCheck();
+    this.filterService.setCurrentFilters(this.filters);
   }
 
   ratingChangeHandler(event: any) {
-    this.filters.rating = parseInt(event.target.value)
+    this.filters.rating = parseInt(event?.target?.value)
     this.filterService.setCurrentFilters(this.filters);
   }
 
   brandChangeHandler(event: any) {
-    if (event.target.checked) this.filters.brands.push(event.target.value);
-    else this.filters.brands = [...this.filters.brands].filter(brand => brand != event.target.value);
+    if (event.target.checked) this.filters?.brands?.push(event?.target?.value);
+    else this.filters.brands = [...this.filters.brands].filter(brand => brand != event?.target?.value);
     this.filterService.setCurrentFilters(this.filters);
   }
 
@@ -58,8 +58,8 @@ export class FilterComponent {
   }
 
   priceFilterErrorCheck() {
-    let mx = this.filters.maxPrice,
-      mn = this.filters.minPrice;
+    let mx = this.filters?.maxPrice,
+      mn = this.filters?.minPrice;
 
     if (mx && mx != this.intMax && !(/^\d+$/.test(mx.toString()))) {
       this.priceFilterErrorMessage = "Max Price must be a positive integer"
@@ -79,5 +79,4 @@ export class FilterComponent {
     this.filterService.isPriceFilterInvalid = false;
     return false;
   }
-
 }
