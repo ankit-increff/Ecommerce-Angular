@@ -108,7 +108,7 @@ export class ProductsComponent {
   }
 
   applySorting(sort: string) {
-    this.products = [...this.productService.productsData];
+    this.products = [...this.productService?.productsData];
     switch (sort) {
       case 'Relevance':
         this.products = this.productService.productsData

@@ -18,7 +18,7 @@ export class ConfirmationModalComponent {
   ngOnInit() {
     this.modalService.removingProduct.subscribe(data => {
       this.product = data;
-      this.modalToggleBtnRef.nativeElement.click();
+      this.modalToggleBtnRef?.nativeElement.click();
     })
   }
   

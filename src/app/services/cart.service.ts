@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CARTITEM} from '../interfaces/cart.types'
+import { CARTDATA, CARTITEM, ITEMMAP} from '../interfaces/cart.types'
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { UsersService } from './users.service';
 import { ProductService } from './product.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class CartService {
   currentCartData:CARTITEM[] = [];
   totalQuantity = new Subject<number>();
   
-  constructor(private usersService: UsersService, private productService: ProductService) { }
+  constructor(private usersService: UsersService, private productService: ProductService, private toastService: ToastService) { }
 
   setCurrentCart(cartItems: CARTITEM[]) {
     this.currentCart.next(cartItems);
@@ -24,6 +25,50 @@ export class CartService {
 
   getCurrentCart():Observable<CARTITEM[]> {
     return this.currentCart.asObservable();
+  }
+
+
+  cartSynchronize(email:string) {
+    let cartDataJson = localStorage.getItem('cart-data');
+    let cartData:CARTDATA = {'guest': {}};
+    try {
+      cartData = JSON.parse(cartDataJson || '');
+    } catch (error) {
+      this.toastService.handleError("Unhandled exception: Cart has been tampered!")
+      localStorage.removeItem('cart-data');
+    }
+
+    if(!cartData?.['guest']) cartData['guest'] = {};
+    if (!(email in cartData)) {
+      cartData[email] = cartData?.['guest'];
+    }
+
+    let userCart = cartData?.[email],
+    localCart = cartData?.['guest'];
+    if(email!='guest') {
+      userCart = this.mergeCarts(userCart, localCart);
+      cartData['guest'] = {};
+      cartData[email] = userCart;
+    }
+    localStorage.setItem('cart-data', JSON.stringify(cartData));
+
+    this.productService.products.subscribe(data => {
+      let products = data?.products;
+      let items:CARTITEM[] = [];
+      for(let id in userCart) {
+        let product = products?.find(p => p?.id == parseInt(id));
+        if(product) items?.push({ product, quantity: userCart[id] });
+      }
+      this.setCurrentCart(items);
+    })
+  }
+  
+  mergeCarts(userCart: ITEMMAP, localCart: ITEMMAP): ITEMMAP {
+    for(let i in localCart) {
+      if(userCart.hasOwnProperty(i)) userCart[i]+= localCart?.[i];
+      else userCart[i] = localCart?.[i];
+    }
+    return userCart;
   }
 
   addToCart(id:number, quantity:number):void {

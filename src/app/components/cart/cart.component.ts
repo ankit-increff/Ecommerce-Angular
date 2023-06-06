@@ -23,7 +23,7 @@ export class CartComponent {
   constructor(private cartService: CartService, private toastService: ToastService, private papa: Papa, private modalService: ModalService, public util: UtilService) { };
 
   ngOnInit() {
-    this.calculateSummary();
+    // this.calculateSummary();
 
     this.cartService.currentCart$.subscribe(data => {
       this.cartItems = data;

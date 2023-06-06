@@ -5,7 +5,10 @@ export interface CARTITEM {
 }
 export interface ITEMMAP {
     [id: number]: number;
-} 
+}
+export interface CARTDATA {
+    [email: string]: ITEMMAP
+}
 
 export interface SUMMARY {
     totalMrp: number,
@@ -13,12 +16,12 @@ export interface SUMMARY {
     deliveryCharges: number,
     amount: number,
     savings: number
-  }
+}
 
 export interface FILTER {
     minPrice: number,
     maxPrice: number,
-    brands:string[],
+    brands: string[],
     rating: number,
     sortBy: string
 }
